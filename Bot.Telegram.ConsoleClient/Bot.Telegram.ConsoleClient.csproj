@@ -9,4 +9,10 @@
       <ProjectReference Include="..\Bot.Telegram.Common\Bot.Telegram.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Credentials\TelegramCredentials.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

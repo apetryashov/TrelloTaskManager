@@ -1,5 +1,7 @@
-﻿using Bot.Telegram.Common;
+﻿using System.IO;
+using Bot.Telegram.Common;
 using Bot.Telegram.Common.Credentials;
+using Newtonsoft.Json;
 
 namespace Bot.Telegram.ConsoleClient
 {
@@ -7,11 +9,8 @@ namespace Bot.Telegram.ConsoleClient
     {
         private static void Main()
         {
-            var credentials = new TelegramCredentials
-            {
-                AccessToken = "access_token"
-            };
-            new TgBot(credentials).Start();
+            var telegramCredentials = JsonConvert.DeserializeObject<TelegramCredentials>(File.ReadAllText("Credentials/TelegramCredentials.json"));
+            new TgBot(telegramCredentials).Start();
         }
     }
 }
