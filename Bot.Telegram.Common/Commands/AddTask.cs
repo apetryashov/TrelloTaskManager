@@ -15,24 +15,28 @@ namespace Bot.Telegram.Common.Commands
         }
 
         public string CommandTrigger => "добавить задачу";
-
-        public ICommandResponse StartCommand(Author author)
+        public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
-            return new CommandResponse(new TextResponse("Введите название задачи"),
-                CommandSession.ExpectCommandSession((int) SessionStatus.EditCommandName));
+            if (commandInfo.Session == null)
+            {
+                return new CommandResponse(new TextResponse("Введите название задачи"),
+                    CommandSession.ExpectCommandSession((int) SessionStatus.EditCommandName));
+            }
+
+            return StartCommand(commandInfo.Author, commandInfo.Command, commandInfo.Session);
         }
 
-        public ICommandResponse StartCommand(Author author, string commandText, ISession commandSession)
+        private ICommandResponse StartCommand(Author author, string commandText, ISession commandSession)
         {
-            if ((SessionStatus) commandSession.ContinueIndex == SessionStatus.EditCommandName)
+            switch ((SessionStatus) commandSession.ContinueIndex)
             {
-                taskProvider.AddNewTask(author.TelegramId, new Task
-                {
-                    Name = commandText
-                });
-
-                return new CommandResponse(new TextResponse("Задача успешно добавлена"),
-                    CommandSession.SimpleCommandSession());
+                case SessionStatus.EditCommandName:
+                    var task = new Task
+                    {
+                        Name = commandText
+                    };
+                    taskProvider.AddNewTask(author.TelegramId, task);
+                    return new CommandResponse(new TextResponse("задача успешно добавлена"));
             }
 
             return new CommandResponse(new TextResponse("Кажется, что-то пошло не так :("),

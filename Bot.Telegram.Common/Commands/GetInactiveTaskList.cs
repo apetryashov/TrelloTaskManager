@@ -17,18 +17,13 @@ namespace Bot.Telegram.Common.Commands
 
         public string CommandTrigger => "все активные задачи";
 
-        public ICommandResponse StartCommand(Author author)
+        public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
-            var tasksInfo = taskProvider.GetInactiveTasks(author.TelegramId)
+            var tasksInfo = taskProvider.GetInactiveTasks(commandInfo.Author.TelegramId)
                 .Select(task => $"[{task.Name}] подробнее /task{task.Id}").ToArray();
             var response = new TextResponse($"Все активные задачи:\r\n{string.Join('\n', tasksInfo)}");
 
             return new CommandResponse(response);
-        }
-
-        public ICommandResponse StartCommand(Author author, string commandText, ISession commandSession)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

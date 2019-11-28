@@ -1,6 +1,4 @@
 using Bot.Telegram.Common.Model;
-using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Model.Session;
 
 namespace Bot.Telegram.Common.Commands
 {
@@ -21,16 +19,10 @@ namespace Bot.Telegram.Common.Commands
         };
 
         public string CommandTrigger => "/start";
-
-        public ICommandResponse StartCommand(Author author)
+        public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
             var response = new ButtonResponse("сделай правильный выбор", menu);
             return new CommandResponse(response);
-        }
-
-        public ICommandResponse StartCommand(Author author, string commandText, ISession commandSession)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

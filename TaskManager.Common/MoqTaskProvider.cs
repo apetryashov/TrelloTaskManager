@@ -13,12 +13,12 @@ namespace TaskManager.Common
 
         public MoqTaskProvider()
         {
-            inactiveTasks.Add(1, new Task {Id = 1, Name = "task1"});
-            inactiveTasks.Add(2, new Task {Id = 2, Name = "task2"});
-            inactiveTasks.Add(3, new Task {Id = 3, Name = "task3"});
-            inactiveTasks.Add(4, new Task {Id = 4, Name = "task4"});
-            activeTasks.Add(5, new Task {Id = 5, Name = "task5"});
-            activeTasks.Add(6, new Task {Id = 6, Name = "task6"});
+            inactiveTasks.Add(1, new Task {Id = 1, Name = "task1", Description = "simple description1"});
+            inactiveTasks.Add(2, new Task {Id = 2, Name = "task2", Description = "simple description2"});
+            inactiveTasks.Add(3, new Task {Id = 3, Name = "task3", Description = "simple description3"});
+            inactiveTasks.Add(4, new Task {Id = 4, Name = "task4", Description = "simple description4"});
+            activeTasks.Add(5, new Task {Id = 5, Name = "task5", Description = "simple description5"});
+            activeTasks.Add(6, new Task {Id = 6, Name = "task6", Description = "simple description6"});
         }
 
         public Task GetTaskById(long author, int id)

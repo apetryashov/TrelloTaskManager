@@ -1,4 +1,3 @@
-using System;
 using Bot.Telegram.Common.Commands;
 using Bot.Telegram.Common.Model;
 using Bot.Telegram.Common.Model.Domain;
@@ -11,7 +10,7 @@ namespace Bot.Telegram.Common
     {
         private const string DefaultCommand = "/start";
         private readonly ICommand[] commands;
-        private readonly InMemorySessionStorage sessionStorage = new InMemorySessionStorage();
+        private readonly ISessionStorage sessionStorage = new InMemorySessionStorage();
 
         public RequestHandler(ITaskProvider taskProvider)
         {
@@ -20,6 +19,7 @@ namespace Bot.Telegram.Common
                 new GetMenu(),
                 new GetInactiveTaskList(taskProvider),
                 new AddTask(taskProvider),
+                new GetTaskInfo(taskProvider)
             };
         }
 
@@ -36,8 +36,9 @@ namespace Bot.Telegram.Common
         private IResponse Execute(Author author, string commandText, ISession session)
         {
             var command = commands[session.CommandId];
-            var commandResponse = command.StartCommand(author, commandText, session);
-            HandleCommandSession(author, session.CommandId, commandResponse.Session);
+            var commandInfo = new CommandInfo(author, commandText, session);
+            var commandResponse = command.StartCommand(commandInfo);
+            sessionStorage.HandleCommandSession(author, session.CommandId, commandResponse.Session);
 
             return commandResponse.Response;
         }
@@ -45,8 +46,9 @@ namespace Bot.Telegram.Common
         private IResponse Execute(Author author, string commandText)
         {
             var (command, commandIndex) = GetCommandByPrefix(commandText);
-            var commandResponse = command.StartCommand(author);
-            HandleCommandSession(author, commandIndex, commandResponse.Session);
+            var commandInfo = new CommandInfo(author, commandText);
+            var commandResponse = command.StartCommand(commandInfo);
+            sessionStorage.HandleCommandSession(author, commandIndex, commandResponse.Session);
 
             return commandResponse.Response;
         }
@@ -55,34 +57,11 @@ namespace Bot.Telegram.Common
         {
             for (var index = 0; index < commands.Length; index++)
             {
-                if (commands[index].CommandTrigger.StartsWith(textCommand))
+                if (textCommand.StartsWith(commands[index].CommandTrigger))
                     return (commands[index], index);
             }
 
             return GetCommandByPrefix(DefaultCommand);
-        }
-
-        private void HandleCommandSession(Author author, int commandIndex, ICommandSession session)
-        {
-            var status = session.SessionStatus;
-            if (status == SessionStatus.Expect)
-            {
-                if (session.ContinueIndex.HasValue)
-                {
-                    sessionStorage.AddUserSession(
-                        author,
-                        new Session(commandIndex, session.ContinueIndex.Value)
-                    );
-                }
-                else
-                {
-                    throw new Exception(); // fix it
-                }
-            }
-            else if (status == SessionStatus.Close)
-            {
-                sessionStorage.KillUserSession(author);
-            }
         }
     }
 }

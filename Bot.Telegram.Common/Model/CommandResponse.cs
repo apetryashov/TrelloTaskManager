@@ -1,5 +1,4 @@
 using Bot.Telegram.Common.Model.Session;
-using JetBrains.Annotations;
 
 namespace Bot.Telegram.Common.Model
 {
