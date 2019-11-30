@@ -20,10 +20,7 @@ namespace Bot.Telegram.Common.Commands
             var taskId = int.Parse(commandInfo.Command.Substring(CommandTrigger.Length));
             var task = taskProvider.GetTaskById(commandInfo.Author.TelegramId, taskId);
             
-            return new CommandResponse(TextResponse.CloseCommand(@$"
-[{task.Name}]
-{task.Description}
-"));
+            return new CommandResponse(TextResponse.CloseCommand(task.ToString()));
         }
     }
 }

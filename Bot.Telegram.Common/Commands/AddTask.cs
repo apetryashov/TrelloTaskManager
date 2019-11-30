@@ -98,13 +98,7 @@ namespace Bot.Telegram.Common.Commands
             taskInitializationStorage.Delete(task.Key);
             //trello saving logic
 
-            return new CommandResponse(TextResponse.CloseCommand(@$"
-Задача успешно добавлена!
-[Название]: {task.Name}
-[Описание]: {task.Description}
-
-Найти задачу вы всегда можете вызвав комманду /task{task.Id}
-Так же вы можете найти ее на trello доске по ссылке (тут должна быть ссылка)"));
+            return new CommandResponse(TextResponse.CloseCommand(task.ToString()));
         }
         
         private ICommandResponse AbortAction(Author author)
