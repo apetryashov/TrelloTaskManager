@@ -7,22 +7,24 @@ namespace Bot.Telegram.Common.Model
         public CommandResponse(IResponse response)
         {
             Response = response;
-            Session = CommandSession.SimpleCommandSession();
         }
         
-        public CommandResponse(IResponse response, int continueIndex)
+        public CommandResponse(IResponse response, int sessionMeta)
         {
             Response = response;
-            Session = CommandSession.ExpectCommandSession(continueIndex);
+            SessionMeta = new SessionMeta
+            {
+                ContinueFrom = sessionMeta
+            };
         }
 
-        public CommandResponse(IResponse response, ICommandSession session)
+        public CommandResponse(IResponse response, ISessionMeta sessionMeta)
         {
             Response = response;
-            Session = session;
+            SessionMeta = sessionMeta;
         }
 
         public IResponse Response { get; }
-        public ICommandSession Session { get; }
+        public ISessionMeta SessionMeta { get; }
     }
 }

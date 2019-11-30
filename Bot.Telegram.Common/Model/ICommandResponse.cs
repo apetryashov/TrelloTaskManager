@@ -5,6 +5,6 @@ namespace Bot.Telegram.Common.Model
     public interface ICommandResponse
     {
         IResponse Response { get; }
-        ICommandSession Session { get; }
+        ISessionMeta SessionMeta { get; }
     }
-}
+}    

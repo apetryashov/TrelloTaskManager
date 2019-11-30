@@ -1,17 +1,26 @@
+using System.Threading.Tasks;
 using Bot.Telegram.Common.Model;
+using Telegram.Bot;
 
 namespace Bot.Telegram.Common
 {
     public static class TelegramResponseHandler
     {
-        public static BotData ResponseAnalyzer(IResponse response)
+        public static async Task SendResponse(ITelegramBotClient bot, long chatId, IResponse response)
         {
-            return response switch
+            switch (response)
             {
-                ButtonResponse buttonAnswer => new BotData(buttonAnswer.Text, buttonAnswer.Buttons),
-                TextResponse textAnswer => new BotData(textAnswer.Text),
-                _ => new BotData(response.Text)
-            };
+                case TextResponse textResponse:
+                    await bot.SendTextMessageAsync(chatId, textResponse.Text);
+                    break;
+                case ButtonResponse buttonResponse:
+                    await bot.SendTextMessageAsync(chatId, buttonResponse.Text, replyMarkup: buttonResponse.Buttons);
+                    break;
+                case ChainResponse chainResponse:
+                    foreach (var chainResponseResponse in chainResponse.Responses)
+                        await SendResponse(bot, chatId, chainResponseResponse);
+                    break;
+            }
         }
     }
 }

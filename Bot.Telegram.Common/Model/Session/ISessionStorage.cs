@@ -4,7 +4,7 @@ namespace Bot.Telegram.Common.Model.Session
 {
     public interface ISessionStorage
     {
-        void HandleCommandSession(Author author, int commandIndex, ICommandSession session);
+        void HandleCommandSession(Author author, int commandIndex, SessionStatus sessionStatus, ISessionMeta sessionMeta);
         bool TryGetUserSession(Author author, out ISession session);
     }
 }

@@ -2,13 +2,13 @@ namespace Bot.Telegram.Common.Model.Session
 {
     public class Session : ISession
     {
-        public Session(int commandId, int continueIndex)
+        public Session(int commandId, ISessionMeta sessionMeta)
         {
             CommandId = commandId;
-            ContinueIndex = continueIndex;
+            SessionMeta = sessionMeta;
         }
 
         public int CommandId { get; }
-        public int ContinueIndex { get; }
+        public ISessionMeta SessionMeta { get; }
     }
 }

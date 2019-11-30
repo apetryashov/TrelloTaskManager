@@ -3,6 +3,6 @@ namespace Bot.Telegram.Common.Model.Session
     public interface ISession
     {
         int CommandId { get; }
-        int ContinueIndex { get; }
+        ISessionMeta SessionMeta { get; }
     }
 }

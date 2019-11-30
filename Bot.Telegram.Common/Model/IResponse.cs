@@ -1,7 +1,9 @@
+using Bot.Telegram.Common.Model.Session;
+
 namespace Bot.Telegram.Common.Model
 {
     public interface IResponse
     {
-        string Text { get; }
+        SessionStatus SessionStatus { get; }
     }
 }

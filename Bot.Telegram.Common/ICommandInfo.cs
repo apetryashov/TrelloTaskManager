@@ -8,6 +8,6 @@ namespace Bot.Telegram.Common
     {
         Author Author { get; }
         string Command { get; }
-        [CanBeNull] ISession Session { get; }
+        [CanBeNull] ISessionMeta SessionMeta { get; }
     }
 }

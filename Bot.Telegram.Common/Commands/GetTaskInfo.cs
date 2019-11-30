@@ -12,6 +12,7 @@ namespace Bot.Telegram.Common.Commands
             this.taskProvider = taskProvider;
         }
 
+        public bool IsPublicCommand => false;
         public string CommandTrigger => "/task";
 
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
@@ -19,7 +20,7 @@ namespace Bot.Telegram.Common.Commands
             var taskId = int.Parse(commandInfo.Command.Substring(CommandTrigger.Length));
             var task = taskProvider.GetTaskById(commandInfo.Author.TelegramId, taskId);
             
-            return new CommandResponse(new TextResponse(@$"
+            return new CommandResponse(TextResponse.CloseCommand(@$"
 [{task.Name}]
 {task.Description}
 "));

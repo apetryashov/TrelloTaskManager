@@ -45,9 +45,7 @@ namespace Bot.Telegram.Common
                 var request = AnalyzeIncomingMessage(message);
                 OnRequest?.Invoke(request);
                 var response = requestHandler.GetResponse(request);
-                var botData = TelegramResponseHandler.ResponseAnalyzer(response);
-
-                await bot.SendTextMessageAsync(message.Chat.Id, botData.Text, replyMarkup: botData.Markup);
+                await TelegramResponseHandler.SendResponse(bot, message.Chat.Id, response);
             }
             catch (ArgumentException e)
             {

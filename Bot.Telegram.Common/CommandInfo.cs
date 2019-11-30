@@ -5,11 +5,11 @@ namespace Bot.Telegram.Common
 {
     public class CommandInfo : ICommandInfo
     {
-        public CommandInfo(Author author, string command, ISession session)
+        public CommandInfo(Author author, string command, ISessionMeta meta)
         {
             Author = author;
             Command = command;
-            Session = session;
+            SessionMeta = meta;
         }
         
         public CommandInfo(Author author, string command)
@@ -20,6 +20,6 @@ namespace Bot.Telegram.Common
 
         public Author Author { get; }
         public string Command { get; }
-        public ISession Session { get; } //is it really need here?
+        public ISessionMeta SessionMeta { get; }
     }
 }

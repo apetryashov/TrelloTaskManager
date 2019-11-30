@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Bot.Telegram.Common.Model.Domain;
 
@@ -8,21 +7,14 @@ namespace Bot.Telegram.Common.Model.Session
     {
         private readonly Dictionary<long, ISession> usersActiveSessions = new Dictionary<long, ISession>();
 
-        public void HandleCommandSession(Author author, int commandIndex, ICommandSession session)
+        public void HandleCommandSession(Author author, int commandIndex, SessionStatus sessionStatus,
+            ISessionMeta sessionMeta)
         {
-            var status = session.SessionStatus;
-            if (status == SessionStatus.Expect)
+            if (sessionStatus == SessionStatus.Expect)
             {
-                if (session.ContinueIndex.HasValue)
-                {
-                    usersActiveSessions[author.TelegramId] = new Session(commandIndex, session.ContinueIndex.Value);
-                }
-                else
-                {
-                    throw new Exception(); // fix it
-                }
+                usersActiveSessions[author.TelegramId] = new Session(commandIndex, sessionMeta);
             }
-            else if (status == SessionStatus.Close)
+            else
             {
                 usersActiveSessions.Remove(author.TelegramId);
             }
