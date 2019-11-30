@@ -2,7 +2,7 @@ using System;
 using Bot.Telegram.Common.Credentials;
 using Bot.Telegram.Common.Model;
 using Bot.Telegram.Common.Model.Domain;
-using TaskManager.Common;
+using Bot.Telegram.Common.Storage;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;

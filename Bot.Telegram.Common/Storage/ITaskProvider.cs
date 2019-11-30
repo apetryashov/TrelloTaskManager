@@ -1,6 +1,4 @@
-using System.Net;
-
-namespace TaskManager.Common
+namespace Bot.Telegram.Common.Storage
 {
     public interface ITaskProvider
     {

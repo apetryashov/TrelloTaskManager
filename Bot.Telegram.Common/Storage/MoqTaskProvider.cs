@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TaskManager.Common
+namespace Bot.Telegram.Common.Storage
 {
     public class MoqTaskProvider : ITaskProvider
     {

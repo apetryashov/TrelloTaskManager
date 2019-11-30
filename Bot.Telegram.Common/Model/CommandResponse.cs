@@ -9,6 +9,12 @@ namespace Bot.Telegram.Common.Model
             Response = response;
             Session = CommandSession.SimpleCommandSession();
         }
+        
+        public CommandResponse(IResponse response, int continueIndex)
+        {
+            Response = response;
+            Session = CommandSession.ExpectCommandSession(continueIndex);
+        }
 
         public CommandResponse(IResponse response, ICommandSession session)
         {

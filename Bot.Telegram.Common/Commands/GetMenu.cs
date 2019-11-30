@@ -19,6 +19,7 @@ namespace Bot.Telegram.Common.Commands
         };
 
         public string CommandTrigger => "/start";
+
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
             var response = new ButtonResponse("сделай правильный выбор", menu);

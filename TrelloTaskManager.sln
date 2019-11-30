@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Telegram.Common", "Bot.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Telegram.ConsoleClient", "Bot.Telegram.ConsoleClient\Bot.Telegram.ConsoleClient.csproj", "{01881776-AE08-4C2E-9A13-86361E90F46D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Common", "TaskManager.Common\TaskManager.Common.csproj", "{89981B40-5725-4145-932F-E37020200266}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{01881776-AE08-4C2E-9A13-86361E90F46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01881776-AE08-4C2E-9A13-86361E90F46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01881776-AE08-4C2E-9A13-86361E90F46D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89981B40-5725-4145-932F-E37020200266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89981B40-5725-4145-932F-E37020200266}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89981B40-5725-4145-932F-E37020200266}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89981B40-5725-4145-932F-E37020200266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

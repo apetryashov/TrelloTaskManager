@@ -1,8 +1,6 @@
 using System.Linq;
 using Bot.Telegram.Common.Model;
-using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Model.Session;
-using TaskManager.Common;
+using Bot.Telegram.Common.Storage;
 
 namespace Bot.Telegram.Common.Commands
 {

@@ -1,6 +1,4 @@
 using System;
-using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Model.Session;
 
 namespace Bot.Telegram.Common.Model
 {
