@@ -1,5 +1,5 @@
 
-namespace Bot.Telegram.Common.Storage
+namespace TaskManager.Common.Storage
 {
     public interface IHasKey<TKey>
     {

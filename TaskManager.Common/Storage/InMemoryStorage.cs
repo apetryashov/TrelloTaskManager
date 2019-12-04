@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Bot.Telegram.Common.Storage
+namespace TaskManager.Common.Storage
 {
     public class InMemoryStorage<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : IHasKey<TKey>, new()

@@ -2,7 +2,7 @@ using System;
 using Bot.Telegram.Common.Credentials;
 using Bot.Telegram.Common.Model;
 using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Storage;
+using TaskManager.Common.Storage;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -19,8 +19,8 @@ namespace Bot.Telegram.Common
         public TgBot(TelegramCredentials credentials)
         {
             bot = new TelegramBotClient(credentials.AccessToken);
-            taskProvider = new MoqTaskProvider();
-            requestHandler = new RequestHandler(taskProvider);
+            taskProvider = null;
+            requestHandler = new RequestHandler(taskProvider, credentials.AppKey);
         }
 
         public event Action<IRequest> OnRequest;

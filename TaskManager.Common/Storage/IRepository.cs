@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Bot.Telegram.Common.Storage
+namespace TaskManager.Common.Storage
 {
     public interface IRepository<TEntity, in TKey>
         where TEntity : IHasKey<TKey>

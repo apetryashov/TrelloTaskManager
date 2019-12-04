@@ -1,23 +1,27 @@
-using System;
 using System.Linq;
 using Bot.Telegram.Common.Commands;
 using Bot.Telegram.Common.Model;
 using Bot.Telegram.Common.Model.Domain;
 using Bot.Telegram.Common.Model.Session;
-using Bot.Telegram.Common.Storage;
+using TaskManager.Common.Helpers;
+using TaskManager.Common.Storage;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.Telegram.Common
 {
     public class RequestHandler : IRequestHandler
     {
+        private const string AuthorizationCommand = "/authorize";
         private readonly ICommand[] commands;
         private readonly ISessionStorage sessionStorage = new InMemorySessionStorage();
+        private readonly AuthorizationStorage authorizationStorage;
 
-        public RequestHandler(ITaskProvider taskProvider)
+        public RequestHandler(ITaskProvider taskProvider, string appKey)
         {
+            authorizationStorage = new AuthorizationStorage();
             commands = new ICommand[]
             {
+                new AuthorizationCommand(authorizationStorage, appKey),
                 new GetInactiveTaskList(taskProvider),
                 new AddTask(taskProvider),
                 new GetTaskInfo(taskProvider),
@@ -29,8 +33,8 @@ namespace Bot.Telegram.Common
         public IResponse GetResponse(IRequest request)
         {
             var author = request.Author;
-            var commandText = request.Command;
 
+            var commandText = request.Command;
             var response = sessionStorage.TryGetUserSession(author, out var session)
                 ? Execute(author, commandText, session)
                 : Execute(author, commandText);
@@ -47,6 +51,9 @@ namespace Bot.Telegram.Common
 
         private IResponse Execute(Author author, string commandText, ISession session)
         {
+            if (!IsAuthorizationCommand(session))
+                author.UserToken = authorizationStorage.GetUserToken(author);
+
             var command = commands[session.CommandId];
             var commandInfo = new CommandInfo(author, commandText, session.SessionMeta);
             var commandResponse = command.StartCommand(commandInfo);
@@ -58,6 +65,11 @@ namespace Bot.Telegram.Common
 
         private IResponse Execute(Author author, string commandText)
         {
+            if (!authorizationStorage.IsAuthorizedUser(author))
+                commandText = AuthorizationCommand;
+            else
+                author.UserToken = authorizationStorage.GetUserToken(author);
+
             var (command, commandIndex) = GetCommandByPrefix(commandText);
 
             if (command == default)
@@ -91,27 +103,10 @@ namespace Bot.Telegram.Common
                 .AsDoubleArray(2);
             ;
         }
-    }
-    
-    public static class ArrayExtension
-    {
-        public static T[][] AsDoubleArray<T>(this T[] array, int columnsCount)
+
+        private bool IsAuthorizationCommand(ISession session)
         {
-            var rowsCount = (int)Math.Ceiling(((double)array.Length / columnsCount));
-
-            var result = new T[rowsCount][];
-
-            for (var i = 0; i < rowsCount; i++)
-            {
-                var cc = Math.Min(array.Length - (i * columnsCount), columnsCount);
-                result[i] = new T[columnsCount];
-                for (var j = 0; j < cc; j++)
-                {
-                    result[i][j] = array[i * columnsCount + j];
-                }
-            }
-
-            return result;
+            return commands[session.CommandId].CommandTrigger == AuthorizationCommand;
         }
     }
 }

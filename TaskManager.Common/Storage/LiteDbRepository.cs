@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using LiteDB;
 
-namespace Bot.Telegram.Common.Storage
+namespace TaskManager.Common.Storage
 {
     public class LiteDbRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : IHasKey<TKey>

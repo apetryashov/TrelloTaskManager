@@ -1,5 +1,5 @@
 using Bot.Telegram.Common.Model;
-using Bot.Telegram.Common.Storage;
+using TaskManager.Common.Storage;
 
 namespace Bot.Telegram.Common.Commands
 {

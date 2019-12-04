@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Bot.Telegram.Common.Model;
 using Bot.Telegram.Common.Model.Domain;
 using Bot.Telegram.Common.Model.Session;
-using Bot.Telegram.Common.Storage;
+using TaskManager.Common.Storage;
 
 namespace Bot.Telegram.Common.Commands
 {
@@ -24,12 +25,12 @@ namespace Bot.Telegram.Common.Commands
         public bool IsPublicCommand => true;
 
         private readonly ITaskProvider taskProvider;
-        private readonly InMemoryStorage<Task, long> taskInitializationStorage;
+        private readonly InMemoryStorage<TrelloTask, long> taskInitializationStorage;
 
         public AddTask(ITaskProvider taskProvider)
         {
             this.taskProvider = taskProvider;
-            taskInitializationStorage = new InMemoryStorage<Task, long>();
+            taskInitializationStorage = new InMemoryStorage<TrelloTask, long>();
         }
 
         public string CommandTrigger => "добавить задачу";
@@ -96,9 +97,13 @@ namespace Bot.Telegram.Common.Commands
                 return new CommandResponse(TextResponse.ExpectedCommand("Задаче необходимо добавить имя"),
                     (int) CommandStatus.Menu);
             taskInitializationStorage.Delete(task.Key);
-            //trello saving logic
+            //trelloAuthorizationProvider saving logic
 
-            return new CommandResponse(TextResponse.CloseCommand(task.ToString()));
+            return new CommandResponse(TextResponse.CloseCommand(@$"
+Задача успешно добавлена!
+
+{task}
+"));
         }
         
         private ICommandResponse AbortAction(Author author)
@@ -106,7 +111,7 @@ namespace Bot.Telegram.Common.Commands
             var task = taskInitializationStorage.Get(author.TelegramId);
             taskInitializationStorage.Delete(task.Key);
 
-            return new CommandResponse(TextResponse.AbortCommand(""));
+            return new CommandResponse(TextResponse.AbortCommand("Отменено"));
         }
 
         private ICommandResponse GetMenu(string message)
@@ -122,6 +127,26 @@ namespace Bot.Telegram.Common.Commands
             Menu = 1,
             SetName = 2,
             SetDescription = 3
+        }
+    }
+
+    public class AuthorizationStorage
+    {
+        private readonly Dictionary<long, string> memory = new Dictionary<long, string>();
+
+        public bool IsAuthorizedUser(Author author)
+        {
+            return memory.ContainsKey(author.TelegramId);
+        }
+        
+        public string GetUserToken(Author author)
+        {
+            return memory[author.TelegramId];
+        }
+
+        public void SetUserToken(Author author, string token)
+        {
+            memory.Add(author.TelegramId, token);
         }
     }
 }
