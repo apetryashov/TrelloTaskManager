@@ -1,8 +1,12 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using Ninject;
 using TaskManager.Bot.Telegram;
 using TaskManager.Bot.Telegram.Credentials;
+using TaskManager.Common.Tasks;
+using TaskManager.Ioc;
+using Telegram.Bot;
 
 namespace Bot.Telegram.ConsoleClient
 {
@@ -13,7 +17,10 @@ namespace Bot.Telegram.ConsoleClient
             var telegramCredentials =
                 JsonConvert.DeserializeObject<TelegramCredentials>(
                     File.ReadAllText("Credentials/TelegramCredentials.json"));
-            var tgBot = new TgBot(telegramCredentials);
+
+            var kernel = NinjectConfig.GetKernel(telegramCredentials);
+
+            var tgBot = kernel.Get<IBot>();
 
             tgBot.OnRequest += request =>
             {
@@ -21,7 +28,7 @@ namespace Bot.Telegram.ConsoleClient
                 Console.WriteLine(
                     $"from: {sender.FirstName} {sender.LastName} {sender.TelegramId} text: {request.Command}");
             };
-
+            
             tgBot.Start();
             Console.ReadLine();
             tgBot.Stop();

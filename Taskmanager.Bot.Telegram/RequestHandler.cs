@@ -3,8 +3,11 @@ using TaskManager.Bot.Telegram.Commands;
 using TaskManager.Bot.Telegram.Model;
 using TaskManager.Bot.Telegram.Model.Domain;
 using TaskManager.Bot.Telegram.Model.Session;
+using TaskManager.Common;
 using TaskManager.Common.Helpers;
 using TaskManager.Common.Storage;
+using TaskManager.Common.Tasks;
+using TaskManager.Trello;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TaskManager.Bot.Telegram
@@ -14,20 +17,12 @@ namespace TaskManager.Bot.Telegram
         private const string AuthorizationCommand = "/authorize";
         private readonly ICommand[] commands;
         private readonly ISessionStorage sessionStorage = new InMemorySessionStorage();
-        private readonly AuthorizationStorage authorizationStorage;
+        private readonly IAuthorizationStorage authorizationStorage;
 
-            public RequestHandler(ITaskProvider taskProvider, string appKey)
-            {
-                authorizationStorage = new AuthorizationStorage();
-                commands = new ICommand[]
-            {
-                new AuthorizationCommand(authorizationStorage, appKey),
-                new GetInactiveTaskList(taskProvider),
-                new AddTask(taskProvider),
-                new GetTaskInfo(taskProvider),
-                new StubCommand("Статистика по задачам (в разработке)"),
-                new StubCommand("help (в разработке)"),
-            };
+        public RequestHandler(IAuthorizationStorage authorizationStorage, ICommand[] commands)
+        {
+            this.authorizationStorage = authorizationStorage;
+            this.commands = commands;
         }
 
         public IResponse GetResponse(IRequest request)
@@ -100,7 +95,7 @@ namespace TaskManager.Bot.Telegram
                 .Where(x => x.IsPublicCommand)
                 .Select(x => x.CommandTrigger)
                 .ToArray()
-                .AsDoubleArray(2);
+                .AsDoubleArray(3);
             ;
         }
 

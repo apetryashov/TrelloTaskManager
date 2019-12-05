@@ -10,14 +10,14 @@ namespace TaskManager.Bot.Telegram.Commands
         public bool IsPublicCommand => false;
         public string CommandTrigger => "/authorize";
 
-        private readonly IAuthorizationProvider trelloAuthorizationProvider;
+        private readonly IAuthorizationProvider authorizationProvider;
 
-        private readonly AuthorizationStorage authorizationStorage;
+        private readonly IAuthorizationStorage authorizationStorage;
 
-        public AuthorizationCommand(AuthorizationStorage authorizationStorage, string appKey)
+        public AuthorizationCommand(IAuthorizationStorage authorizationStorage, IAuthorizationProvider authorizationProvider)
         {
             this.authorizationStorage = authorizationStorage;
-            trelloAuthorizationProvider = new TrelloAuthorizationProvider(appKey);
+            this.authorizationProvider = authorizationProvider;
         }
 
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
@@ -45,9 +45,9 @@ namespace TaskManager.Bot.Telegram.Commands
             var token = commandInfo.Command;
 
 
-            if (trelloAuthorizationProvider.IsValidAuthorizationToken(token).Result)
+            if (authorizationProvider.IsValidAuthorizationToken(token).Result)
             {
-                trelloAuthorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
+                authorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
                 authorizationStorage.SetUserToken(commandInfo.Author, token);
                 return new CommandResponse(TextResponse.CloseCommand("Все круто"));
             }
@@ -64,7 +64,7 @@ namespace TaskManager.Bot.Telegram.Commands
             return TextResponse.ExpectedCommand(
                 @$"
 Тебе нужно перейте по указанной ссылке дать доступ к своим таблицам учтной записи нашего бота.
-Для этого тебе нужно перейти по ссылке {trelloAuthorizationProvider.GetAuthorizationUrl()} и нажать кнопку <Разрешить>.
+Для этого тебе нужно перейти по ссылке {authorizationProvider.GetAuthorizationUrl()} и нажать кнопку <Разрешить>.
 Затем нужно отправить в ответном сообщении полученный тобой токен.
 Чуть позже этот процесс будет проще :(
 ");

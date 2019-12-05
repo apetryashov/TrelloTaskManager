@@ -4,11 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskmanager.Bot.Telegram", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Telegram.ConsoleClient", "Bot.Telegram.ConsoleClient\Bot.Telegram.ConsoleClient.csproj", "{01881776-AE08-4C2E-9A13-86361E90F46D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrelloClientTester", "TrelloClientTester\TrelloClientTester.csproj", "{88060BCF-8C5E-4344-9B38-FEABF5A41040}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Trello", "TaskManager.Trello\TaskManager.Trello.csproj", "{2E456275-FD9B-4534-AF1C-8412A830AF6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Common", "TaskManager.Common\TaskManager.Common.csproj", "{542B5918-5FBC-44DA-94F2-53B28901F44A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Ioc", "TaskManager.Ioc\TaskManager.Ioc.csproj", "{D32B3297-348D-460F-9178-FE064893A53E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +24,6 @@ Global
 		{01881776-AE08-4C2E-9A13-86361E90F46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01881776-AE08-4C2E-9A13-86361E90F46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01881776-AE08-4C2E-9A13-86361E90F46D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88060BCF-8C5E-4344-9B38-FEABF5A41040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88060BCF-8C5E-4344-9B38-FEABF5A41040}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88060BCF-8C5E-4344-9B38-FEABF5A41040}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88060BCF-8C5E-4344-9B38-FEABF5A41040}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E456275-FD9B-4534-AF1C-8412A830AF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E456275-FD9B-4534-AF1C-8412A830AF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E456275-FD9B-4534-AF1C-8412A830AF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,5 +32,9 @@ Global
 		{542B5918-5FBC-44DA-94F2-53B28901F44A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{542B5918-5FBC-44DA-94F2-53B28901F44A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{542B5918-5FBC-44DA-94F2-53B28901F44A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D32B3297-348D-460F-9178-FE064893A53E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D32B3297-348D-460F-9178-FE064893A53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D32B3297-348D-460F-9178-FE064893A53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D32B3297-348D-460F-9178-FE064893A53E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

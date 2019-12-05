@@ -3,6 +3,7 @@ using TaskManager.Bot.Telegram.Credentials;
 using TaskManager.Bot.Telegram.Model;
 using TaskManager.Bot.Telegram.Model.Domain;
 using TaskManager.Common.Storage;
+using TaskManager.Common.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -10,17 +11,15 @@ using Telegram.Bot.Types.Enums;
 
 namespace TaskManager.Bot.Telegram
 {
-    public class TgBot
+    public class TgBot : IBot
     {
         private readonly ITelegramBotClient bot;
         private readonly IRequestHandler requestHandler;
-        private readonly ITaskProvider taskProvider;
 
-        public TgBot(TelegramCredentials credentials)
+        public TgBot(ITelegramBotClient bot, IRequestHandler requestHandler)
         {
-            bot = new TelegramBotClient(credentials.AccessToken);
-            taskProvider = null;
-            requestHandler = new RequestHandler(taskProvider, credentials.AppKey);
+            this.bot = bot;
+            this.requestHandler =requestHandler;
         }
 
         public event Action<IRequest> OnRequest;

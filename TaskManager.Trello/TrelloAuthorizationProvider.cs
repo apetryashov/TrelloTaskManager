@@ -21,10 +21,10 @@ namespace TaskManager.Trello
             "Готово"
         };
 
-        public TrelloAuthorizationProvider(string appKey)
+        public TrelloAuthorizationProvider(AppKey appKey, ITrelloFactory trelloFactory)
         {
-            this.appKey = appKey;
-            factory = new TrelloFactory();
+            this.appKey = appKey.Key;
+            factory = trelloFactory;
         }
 
         public async Task<bool> IsValidAuthorizationToken(string userToken)

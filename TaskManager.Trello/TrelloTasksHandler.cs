@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manatee.Trello;
+using TaskManager.Common;
 using TaskManager.Common.Tasks;
 using TaskStatus = TaskManager.Common.Tasks.TaskStatus;
 
@@ -14,10 +15,10 @@ namespace TaskManager.Trello
         private readonly ITrelloFactory factory;
         private readonly Dictionary<string, BoardInfo> userTokenToBoardInfo = new Dictionary<string, BoardInfo>();
 
-        public TrelloTasksHandler(string appKey)
+        public TrelloTasksHandler(AppKey appKey, ITrelloFactory trelloFactory)
         {
-            this.appKey = appKey;
-            factory = new TrelloFactory();
+            this.appKey = appKey.Key;
+            factory = trelloFactory;
         }
 
         public async Task<MyTask> GetTaskById(string userToken, string taskId)
