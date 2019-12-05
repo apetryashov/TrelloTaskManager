@@ -1,15 +1,15 @@
 using System.Linq;
 using TaskManager.Bot.Telegram.Model;
-using TaskManager.Common.Storage;
+using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Telegram.Commands
 {
     public class GetInactiveTaskList : ICommand
     {
         public bool IsPublicCommand => true;
-        private readonly ITaskProvider taskProvider;
+        private readonly ITaskHandler taskProvider;
 
-        public GetInactiveTaskList(ITaskProvider taskProvider)
+        public GetInactiveTaskList(ITaskHandler taskProvider)
         {
             this.taskProvider = taskProvider;
         }
@@ -18,7 +18,7 @@ namespace TaskManager.Bot.Telegram.Commands
 
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
-            var tasksInfo = taskProvider.GetInactiveTasks(commandInfo.Author.TelegramId)
+            var tasksInfo = taskProvider.GetAllTasks(commandInfo.Author.UserToken, TaskStatus.Inactive).Result
                 .Select(task => $"[{task.Name}] подробнее /task{task.Id}").ToArray();
             var response = TextResponse.CloseCommand($"Все активные задачи:\r\n{string.Join('\n', tasksInfo)}");
 

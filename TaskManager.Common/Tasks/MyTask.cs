@@ -1,15 +1,17 @@
 using System.Text;
 using JetBrains.Annotations;
+using TaskManager.Common.Storage;
 
-namespace TaskManager.Common.Storage
+namespace TaskManager.Common.Tasks
 {
-    public class TrelloTask : IHasKey<long> // rename and extract to a separate project
+    public class MyTask : IHasKey<long>
     {
         public string Id { get; set; }
         public string Name { get; set; }
         [CanBeNull] public string Description { get; set; }
         public long Key { get; set; }
         public string Url { get; set; }
+        public TaskStatus TaskStatus { get; set; }
 
         public override string ToString()
         {

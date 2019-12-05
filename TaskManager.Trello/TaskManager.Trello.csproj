@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Taskmanager.Bot.Telegram\Taskmanager.Bot.Telegram.csproj" />
+      <ProjectReference Include="..\TaskManager.Common\TaskManager.Common.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,13 +1,14 @@
 using TaskManager.Bot.Telegram.Model;
 using TaskManager.Common.Storage;
+using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Telegram.Commands
 {
     public class GetTaskInfo : ICommand
     {
-        private readonly ITaskProvider taskProvider;
+        private readonly ITaskHandler taskProvider;
 
-        public GetTaskInfo(ITaskProvider taskProvider)
+        public GetTaskInfo(ITaskHandler taskProvider)
         {
             this.taskProvider = taskProvider;
         }
@@ -17,8 +18,8 @@ namespace TaskManager.Bot.Telegram.Commands
 
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
-            var taskId = int.Parse(commandInfo.Command.Substring(CommandTrigger.Length));
-            var task = taskProvider.GetTaskById(commandInfo.Author.TelegramId, taskId);
+            var taskId = commandInfo.Command.Substring(CommandTrigger.Length + 1);
+            var task = taskProvider.GetTaskById(commandInfo.Author.UserToken, taskId);
             
             return new CommandResponse(TextResponse.CloseCommand(task.ToString()));
         }

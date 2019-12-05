@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manatee.Trello;
-using TaskManager.Common.Storage;
+using TaskManager.Common.Tasks;
+using TaskStatus = TaskManager.Common.Tasks.TaskStatus;
 
 namespace TaskManager.Trello
 {
-    public class TrelloTaskProvider // refactor this
+    public class TrelloTasksHandler : ITaskHandler // refactor this
     {
         private readonly string appKey;
         private readonly ITrelloFactory factory;
         private readonly Dictionary<string, BoardInfo> userTokenToBoardInfo = new Dictionary<string, BoardInfo>();
 
-        public TrelloTaskProvider(string appKey)
+        public TrelloTasksHandler(string appKey)
         {
             this.appKey = appKey;
             factory = new TrelloFactory();
         }
 
-        public async Task<TrelloTask> GetTaskById(string userToken, string taskId)
+        public async Task<MyTask> GetTaskById(string userToken, string taskId)
         {
             var task = new Card(taskId, new TrelloAuthorization
             {
@@ -28,19 +29,40 @@ namespace TaskManager.Trello
             });
             await task.Refresh();
 
-            return ToTrelloTask(task);
+            return ToTrelloTask(task, TaskStatus.Inactive); //need set correct status
         }
 
-        public async Task<TrelloTask[]> GetInactiveTasks(string userToken) =>
-            await GetAllColumnTasks(userToken, ColumnTypes.Inactive);
+        public async Task<MyTask[]> GetAllTasks(string userToken, TaskStatus status)
+        {
+            return await GetAllColumnTasks(userToken, status);
+        }
 
-        public async Task<TrelloTask[]> GetActiveTasks(string userToken) =>
-            await GetAllColumnTasks(userToken, ColumnTypes.Active);
+        public async Task ChangeTaskStatus(string userToken, MyTask task, TaskStatus toTaskStatus)
+        {
+            var auth = new TrelloAuthorization
+            {
+                AppKey = appKey,
+                UserToken = userToken
+            };
+            var boardInfo = await GetBoardInfo(userToken);
+            var card = new Card(task.Id, auth);
 
-        public async Task<TrelloTask[]> GetResolvedTasks(string userToken) =>
-            await GetAllColumnTasks(userToken, ColumnTypes.Resolved);
+            await card.Refresh();
 
-        private async Task<TrelloTask[]> GetAllColumnTasks(string userToken, ColumnTypes column)
+            var list = toTaskStatus switch
+            {
+                TaskStatus.Active => new List(boardInfo.ActiveListId, auth),
+                TaskStatus.Inactive => new List(boardInfo.InactiveListId, auth),
+                TaskStatus.Resolved => new List(boardInfo.ResolvedListId, auth),
+            };
+
+            await list.Refresh();
+
+            await list.Cards.Add(card);
+            await card.Delete();
+        }
+
+        private async Task<MyTask[]> GetAllColumnTasks(string userToken, TaskStatus status)
         {
             var auth = new TrelloAuthorization
             {
@@ -49,57 +71,19 @@ namespace TaskManager.Trello
             };
             var boardInfo = await GetBoardInfo(userToken);
 
-            var boardList = column switch
+            var boardList = status switch
             {
-                ColumnTypes.Inactive => factory.List(boardInfo.InactiveListId, auth),
-                ColumnTypes.Active => factory.List(boardInfo.ActiveListId, auth),
-                ColumnTypes.Resolved => factory.List(boardInfo.ResolvedListId, auth),
+                TaskStatus.Inactive => factory.List(boardInfo.InactiveListId, auth),
+                TaskStatus.Active => factory.List(boardInfo.ActiveListId, auth),
+                TaskStatus.Resolved => factory.List(boardInfo.ResolvedListId, auth),
             };
 
             await boardList.Refresh();
 
-            return boardList.Cards.Select(ToTrelloTask).ToArray();
+            return boardList.Cards.Select(card => ToTrelloTask(card, status)).ToArray();
         }
 
-        public async Task SetAsActive(string userToken, TrelloTask trelloTask)
-        {
-            var auth = new TrelloAuthorization
-            {
-                AppKey = appKey,
-                UserToken = userToken
-            };
-            var boardInfo = await GetBoardInfo(userToken);
-            var card = new Card(trelloTask.Id, auth);
-
-            await card.Refresh();
-
-            var activeList = new List(boardInfo.ActiveListId, auth);
-            await activeList.Refresh();
-
-            await activeList.Cards.Add(card);
-            await card.Delete();
-        }
-
-        public async Task  SetAsDone(string userToken, TrelloTask trelloTask)
-        {
-            var auth = new TrelloAuthorization
-            {
-                AppKey = appKey,
-                UserToken = userToken
-            };
-            var boardInfo = await GetBoardInfo(userToken);
-            var card = new Card(trelloTask.Id, auth);
-
-            await card.Refresh();
-
-            var activeList = new List(boardInfo.ActiveListId, auth);
-            await activeList.Refresh();
-
-            await activeList.Cards.Add(card);
-            await card.Delete();
-        }
-
-        public async Task<TrelloTask> AddNewTask(string userToken, TrelloTask trelloTask)
+        public async Task<MyTask> AddNewTask(string userToken, MyTask myTask)
         {
             var auth = new TrelloAuthorization
             {
@@ -110,9 +94,9 @@ namespace TaskManager.Trello
             var column = new List(boardInfo.InactiveListId, auth);
 
             await column.Refresh();
-            var card = await column.Cards.Add(name: trelloTask.Name, description: trelloTask.Description);
+            var card = await column.Cards.Add(name: myTask.Name, description: myTask.Description);
 
-            return ToTrelloTask(card);
+            return ToTrelloTask(card, TaskStatus.Inactive);
         }
 
         private async Task<BoardInfo> GetBoardInfo(string userToken)
@@ -143,15 +127,16 @@ namespace TaskManager.Trello
             return boardInfo;
         }
 
-        private TrelloTask ToTrelloTask(ICard card)
+        private MyTask ToTrelloTask(ICard card, TaskStatus status)
         {
-            return new TrelloTask
+            return new MyTask
             {
                 Name = card.Name,
                 Description = card.Description,
                 Id = card.Id,
                 Url = card.ShortUrl,
-                Key = card.ShortId.Value
+                Key = card.ShortId.Value,
+                TaskStatus = status
             };
         }
 
@@ -160,13 +145,6 @@ namespace TaskManager.Trello
             public string InactiveListId { get; set; }
             public string ActiveListId { get; set; }
             public string ResolvedListId { get; set; }
-        }
-
-        private enum ColumnTypes
-        {
-            Inactive = 0,
-            Active = 1,
-            Resolved = 2
         }
     }
 }

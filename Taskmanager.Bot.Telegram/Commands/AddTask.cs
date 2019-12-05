@@ -25,10 +25,10 @@ namespace TaskManager.Bot.Telegram.Commands
         };
         public bool IsPublicCommand => true;
 
-        private readonly ITaskProvider taskProvider;
+        private readonly ITaskHandler taskProvider;
         private readonly InMemoryStorage<MyTask, long> taskInitializationStorage;
 
-        public AddTask(ITaskProvider taskProvider)
+        public AddTask(ITaskHandler taskProvider)
         {
             this.taskProvider = taskProvider;
             taskInitializationStorage = new InMemoryStorage<MyTask, long>();
