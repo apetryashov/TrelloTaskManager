@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using Bot.Telegram.Common;
-using Bot.Telegram.Common.Credentials;
 using Newtonsoft.Json;
+using TaskManager.Bot.Telegram;
+using TaskManager.Bot.Telegram.Credentials;
 
 namespace Bot.Telegram.ConsoleClient
 {

@@ -1,8 +1,8 @@
-using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Model.Session;
 using JetBrains.Annotations;
+using TaskManager.Bot.Telegram.Model.Domain;
+using TaskManager.Bot.Telegram.Model.Session;
 
-namespace Bot.Telegram.Common
+namespace TaskManager.Bot.Telegram
 {
     public interface ICommandInfo
     {

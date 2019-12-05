@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Bot.Telegram.Common.Model;
+using TaskManager.Bot.Telegram.Model;
 using Telegram.Bot;
 
-namespace Bot.Telegram.Common
+namespace TaskManager.Bot.Telegram
 {
     public static class TelegramResponseHandler
     {

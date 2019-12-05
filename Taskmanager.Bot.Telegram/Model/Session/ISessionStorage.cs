@@ -1,6 +1,6 @@
-using Bot.Telegram.Common.Model.Domain;
+using TaskManager.Bot.Telegram.Model.Domain;
 
-namespace Bot.Telegram.Common.Model.Session
+namespace TaskManager.Bot.Telegram.Model.Session
 {
     public interface ISessionStorage
     {

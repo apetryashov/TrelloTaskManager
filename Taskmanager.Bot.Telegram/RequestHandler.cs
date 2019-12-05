@@ -1,13 +1,13 @@
 using System.Linq;
-using Bot.Telegram.Common.Commands;
-using Bot.Telegram.Common.Model;
-using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Model.Session;
+using TaskManager.Bot.Telegram.Commands;
+using TaskManager.Bot.Telegram.Model;
+using TaskManager.Bot.Telegram.Model.Domain;
+using TaskManager.Bot.Telegram.Model.Session;
 using TaskManager.Common.Helpers;
 using TaskManager.Common.Storage;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Bot.Telegram.Common
+namespace TaskManager.Bot.Telegram
 {
     public class RequestHandler : IRequestHandler
     {
@@ -16,10 +16,10 @@ namespace Bot.Telegram.Common
         private readonly ISessionStorage sessionStorage = new InMemorySessionStorage();
         private readonly AuthorizationStorage authorizationStorage;
 
-        public RequestHandler(ITaskProvider taskProvider, string appKey)
-        {
-            authorizationStorage = new AuthorizationStorage();
-            commands = new ICommand[]
+            public RequestHandler(ITaskProvider taskProvider, string appKey)
+            {
+                authorizationStorage = new AuthorizationStorage();
+                commands = new ICommand[]
             {
                 new AuthorizationCommand(authorizationStorage, appKey),
                 new GetInactiveTaskList(taskProvider),

@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Bot.Telegram.Common.Credentials
+namespace TaskManager.Bot.Telegram.Credentials
 {
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
     public class TelegramCredentials

@@ -1,8 +1,8 @@
 using System;
-using Bot.Telegram.Common.Model.Session;
+using TaskManager.Bot.Telegram.Model.Session;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Bot.Telegram.Common.Model
+namespace TaskManager.Bot.Telegram.Model
 {
     public class ButtonResponse : IResponse
     {

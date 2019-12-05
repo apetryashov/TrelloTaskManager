@@ -1,8 +1,8 @@
 using System.Linq;
-using Bot.Telegram.Common.Model;
+using TaskManager.Bot.Telegram.Model;
 using TaskManager.Common.Storage;
 
-namespace Bot.Telegram.Common.Commands
+namespace TaskManager.Bot.Telegram.Commands
 {
     public class GetInactiveTaskList : ICommand
     {

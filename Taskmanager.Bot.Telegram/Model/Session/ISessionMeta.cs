@@ -1,4 +1,4 @@
-namespace Bot.Telegram.Common.Model.Session
+namespace TaskManager.Bot.Telegram.Model.Session
 {
     public interface ISessionMeta
     {

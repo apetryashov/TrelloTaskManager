@@ -1,14 +1,14 @@
 using System;
-using Bot.Telegram.Common.Credentials;
-using Bot.Telegram.Common.Model;
-using Bot.Telegram.Common.Model.Domain;
+using TaskManager.Bot.Telegram.Credentials;
+using TaskManager.Bot.Telegram.Model;
+using TaskManager.Bot.Telegram.Model.Domain;
 using TaskManager.Common.Storage;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Bot.Telegram.Common
+namespace TaskManager.Bot.Telegram
 {
     public class TgBot
     {

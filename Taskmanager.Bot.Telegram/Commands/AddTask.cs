@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Bot.Telegram.Common.Model;
-using Bot.Telegram.Common.Model.Domain;
-using Bot.Telegram.Common.Model.Session;
+using TaskManager.Bot.Telegram.Model;
+using TaskManager.Bot.Telegram.Model.Domain;
+using TaskManager.Bot.Telegram.Model.Session;
 using TaskManager.Common.Storage;
+using TaskManager.Common.Tasks;
 
-namespace Bot.Telegram.Common.Commands
+namespace TaskManager.Bot.Telegram.Commands
 {
     public class AddTask : ICommand
     {
@@ -25,12 +26,12 @@ namespace Bot.Telegram.Common.Commands
         public bool IsPublicCommand => true;
 
         private readonly ITaskProvider taskProvider;
-        private readonly InMemoryStorage<TrelloTask, long> taskInitializationStorage;
+        private readonly InMemoryStorage<MyTask, long> taskInitializationStorage;
 
         public AddTask(ITaskProvider taskProvider)
         {
             this.taskProvider = taskProvider;
-            taskInitializationStorage = new InMemoryStorage<TrelloTask, long>();
+            taskInitializationStorage = new InMemoryStorage<MyTask, long>();
         }
 
         public string CommandTrigger => "добавить задачу";

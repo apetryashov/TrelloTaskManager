@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Bot.Telegram.Common.Model.Domain
+namespace TaskManager.Bot.Telegram.Model.Domain
 {
     public class Author
     {

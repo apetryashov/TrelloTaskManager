@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Bot.Telegram.Common.Model.Session;
+using TaskManager.Bot.Telegram.Model.Session;
 
-namespace Bot.Telegram.Common.Model
+namespace TaskManager.Bot.Telegram.Model
 {
     public class ChainResponse : IResponse
     {
