@@ -11,7 +11,7 @@ namespace TaskManager.Common.Tasks
         [CanBeNull] public string Description { get; set; }
         public long Key { get; set; }
         public string Url { get; set; }
-        public TaskStatus TaskStatus { get; set; }
+        public TaskStatus Status { get; set; }
 
         public override string ToString()
         {

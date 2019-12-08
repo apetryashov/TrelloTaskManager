@@ -4,11 +4,9 @@ using Newtonsoft.Json;
 using Ninject;
 using TaskManager.Bot.Telegram;
 using TaskManager.Bot.Telegram.Credentials;
-using TaskManager.Common.Tasks;
 using TaskManager.Ioc;
-using Telegram.Bot;
 
-namespace Bot.Telegram.ConsoleClient
+namespace TaskManager.Bot.ConsoleRunner
 {
     internal static class EntryPoint
     {
@@ -28,6 +26,8 @@ namespace Bot.Telegram.ConsoleClient
                 Console.WriteLine(
                     $"from: {sender.FirstName} {sender.LastName} {sender.TelegramId} text: {request.Command}");
             };
+
+            tgBot.OnError += Console.WriteLine;
             
             tgBot.Start();
             Console.ReadLine();

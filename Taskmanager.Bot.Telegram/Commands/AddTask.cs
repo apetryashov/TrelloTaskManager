@@ -79,7 +79,7 @@ namespace TaskManager.Bot.Telegram.Commands
             var task = taskInitializationStorage.Get(author.TelegramId);
             task.Name = taskName;
             taskInitializationStorage.Update(task);
-            return new CommandResponse(new TextResponse("Название добавлено", SessionStatus.Expect), (int) CommandStatus.Menu);
+            return GetMenu("Название добавлено");
         }
 
         private ICommandResponse SetDescriptionAction(Author author, string taskDescription)
@@ -87,7 +87,7 @@ namespace TaskManager.Bot.Telegram.Commands
             var task = taskInitializationStorage.Get(author.TelegramId);
             task.Description = taskDescription;
             taskInitializationStorage.Update(task);
-            return new CommandResponse(TextResponse.ExpectedCommand("Описание добавлено"), (int) CommandStatus.Menu);
+            return GetMenu("Описание добавлено");
         }
 
         private ICommandResponse SaveAction(Author author)
@@ -98,7 +98,7 @@ namespace TaskManager.Bot.Telegram.Commands
                     (int) CommandStatus.Menu);
             taskInitializationStorage.Delete(task.Key);
             //trelloAuthorizationProvider saving logic
-            taskProvider.AddNewTask(author.UserToken, task);
+            taskProvider.AddNewTask(author.UserToken, task).Wait();
             return new CommandResponse(TextResponse.CloseCommand(@$"
 Задача успешно добавлена!
 

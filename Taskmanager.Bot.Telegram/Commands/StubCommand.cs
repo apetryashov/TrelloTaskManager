@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using TaskManager.Bot.Telegram.Model;
 using TaskManager.Bot.Telegram.Model.Session;
 
@@ -10,11 +11,13 @@ namespace TaskManager.Bot.Telegram.Commands
             CommandTrigger = commandTrigger;
             IsPublicCommand = isPublicCommand;
         }
+
         public bool IsPublicCommand { get; }
         public string CommandTrigger { get; }
+
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
         {
-            return new CommandResponse( new TextResponse("не найдено", SessionStatus.Close));
+            return new CommandResponse(new TextResponse("Данная функция пока не реализована", SessionStatus.Close));
         }
     }
 }

@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskmanager.Bot.Telegram", "Taskmanager.Bot.Telegram\Taskmanager.Bot.Telegram.csproj", "{7AB26A4A-6890-453C-8949-2B55FE58AA4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Telegram.ConsoleClient", "Bot.Telegram.ConsoleClient\Bot.Telegram.ConsoleClient.csproj", "{01881776-AE08-4C2E-9A13-86361E90F46D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot.ConsoleRunner", "TaskManager.Bot.ConsoleRunner\TaskManager.Bot.ConsoleRunner.csproj", "{01881776-AE08-4C2E-9A13-86361E90F46D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Trello", "TaskManager.Trello\TaskManager.Trello.csproj", "{2E456275-FD9B-4534-AF1C-8412A830AF6D}"
 EndProject

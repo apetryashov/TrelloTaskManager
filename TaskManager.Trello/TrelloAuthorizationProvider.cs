@@ -47,7 +47,7 @@ namespace TaskManager.Trello
             await boardCollection.Refresh();
             var board = boardCollection.FirstOrDefault(x => x.Name == SystemTableName) ??
                         await me.Boards.Add(SystemTableName);
-                                                        
+
             var listCollection = board.Lists;
 
             var isValidCollection =

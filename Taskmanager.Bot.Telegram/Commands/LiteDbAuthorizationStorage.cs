@@ -38,7 +38,7 @@ namespace TaskManager.Bot.Telegram.Commands
 
             if (IsAuthorizedUser(author))
             {
-                collection.Update(authorizationInfo);
+                collection.Update(authorizationInfo.TelegramId, authorizationInfo);
                 return;
             }
 
