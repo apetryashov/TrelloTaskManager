@@ -1,9 +1,7 @@
 using System;
-using TaskManager.Bot.Telegram.Credentials;
+using System.Threading.Tasks;
 using TaskManager.Bot.Telegram.Model;
 using TaskManager.Bot.Telegram.Model.Domain;
-using TaskManager.Common.Storage;
-using TaskManager.Common.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -19,7 +17,7 @@ namespace TaskManager.Bot.Telegram
         public TgBot(ITelegramBotClient bot, IRequestHandler requestHandler)
         {
             this.bot = bot;
-            this.requestHandler =requestHandler;
+            this.requestHandler = requestHandler;
         }
 
         public event Action<IRequest> OnRequest;
@@ -29,6 +27,7 @@ namespace TaskManager.Bot.Telegram
         {
             bot.StartReceiving();
             bot.OnMessage += BotOnMessageReceived;
+            bot.OnCallbackQuery += BotOnCallbackQueryReceived;
         }
 
         public void Stop()
@@ -42,9 +41,7 @@ namespace TaskManager.Bot.Telegram
             try
             {
                 var request = AnalyzeIncomingMessage(message);
-                OnRequest?.Invoke(request);
-                var response = requestHandler.GetResponse(request);
-                await TelegramResponseHandler.SendResponse(bot, message.Chat.Id, response);
+                await HandleIncomingRequest(request);
             }
             catch (ArgumentException e)
             {
@@ -57,6 +54,32 @@ namespace TaskManager.Bot.Telegram
             }
         }
 
+        private async void BotOnCallbackQueryReceived(object sender,
+            CallbackQueryEventArgs callbackQueryEventArgs)
+        {
+            try
+            {
+                var request = AnalyzeIncomingCallback(callbackQueryEventArgs);
+                await HandleIncomingRequest(request);
+            }
+            catch (ArgumentException e)
+            {
+                OnError?.Invoke(e);
+                await bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, e.Message);
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(e);
+            }
+        }
+
+        private async Task HandleIncomingRequest(IRequest request)
+        {
+            OnRequest?.Invoke(request);
+            var response = requestHandler.GetResponse(request);
+            await TelegramResponseHandler.SendResponse(bot, request.Author.TelegramId, response);
+        }
+
         private IRequest AnalyzeIncomingMessage(Message message)
         {
             if (message.Type != MessageType.Text)
@@ -64,6 +87,13 @@ namespace TaskManager.Bot.Telegram
             var sender = message.Chat;
             var author = new Author(sender.Id, sender.FirstName, sender.LastName, sender.Username);
             return new BaseRequest(author, message.Text, message.Chat.Id);
+        }
+
+        private IRequest AnalyzeIncomingCallback(CallbackQueryEventArgs callback)
+        {
+            var sender = callback.CallbackQuery.Message.Chat;
+            var author = new Author(sender.Id, sender.FirstName, sender.LastName, sender.Username);
+            return new BaseRequest(author, callback.CallbackQuery.Data, sender.Id);
         }
     }
 }

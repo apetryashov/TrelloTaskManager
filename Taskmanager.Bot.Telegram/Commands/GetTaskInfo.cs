@@ -1,4 +1,5 @@
 using TaskManager.Bot.Telegram.Model;
+using TaskManager.Bot.Telegram.Model.Session;
 using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Telegram.Commands
@@ -19,8 +20,36 @@ namespace TaskManager.Bot.Telegram.Commands
         {
             var taskId = commandInfo.Command.Substring(CommandTrigger.Length + 1);
             var task = taskProvider.GetTaskById(commandInfo.Author.UserToken, taskId).Result;
+
+            var response = InlineButtonResponse.CreateWithHorizontalButtons(
+                task.ToString(),
+                GetButtons(task.Status, taskId),
+                SessionStatus.Close
+            );
             
-            return new CommandResponse(TextResponse.CloseCommand(task.ToString()));
+            return new CommandResponse(response);
+        }
+
+        private (string text, string callback)[] GetButtons(TaskStatus status, string taskId)
+        {
+            return status switch
+            {
+                TaskStatus.Inactive => new (string text, string callback)[]
+                {
+                    ("-> Делаю", $"/changeTaskStatus_{TaskStatus.Active}_{taskId}"),
+                    ("-> Сделал", $"/changeTaskStatus_{TaskStatus.Resolved}_{taskId}"),
+                },
+                TaskStatus.Active => new (string text, string callback)[]
+                {
+                    ("Сделаю <-", $"/changeTaskStatus_{TaskStatus.Inactive}_{taskId}"),
+                    ("-> Сделал", $"/changeTaskStatus_{TaskStatus.Resolved}_{taskId}"),
+                },
+                TaskStatus.Resolved => new (string text, string callback)[]
+                {
+                    ("Сделаю <-", $"/changeTaskStatus_{TaskStatus.Inactive}_{taskId}"),
+                    ("Делаю <-", $"/changeTaskStatus_{TaskStatus.Active}_{taskId}")
+                }
+            };
         }
     }
 }

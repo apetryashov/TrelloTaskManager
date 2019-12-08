@@ -16,6 +16,9 @@ namespace TaskManager.Bot.Telegram
                 case ButtonResponse buttonResponse:
                     await bot.SendTextMessageAsync(chatId, buttonResponse.Text, replyMarkup: buttonResponse.Buttons);
                     break;
+                case InlineButtonResponse buttonResponse:
+                    await bot.SendTextMessageAsync(chatId, buttonResponse.Text, replyMarkup: buttonResponse.Buttons);
+                    break;
                 case ChainResponse chainResponse:
                     foreach (var chainResponseResponse in chainResponse.Responses)
                         await SendResponse(bot, chatId, chainResponseResponse);
