@@ -1,3 +1,4 @@
+using MihaZupan;
 using Ninject.Modules;
 using TaskManager.Bot.Telegram;
 using Telegram.Bot;
@@ -15,7 +16,11 @@ namespace TaskManager.Ioc.Modules
 
         public override void Load()
         {
-            Bind<ITelegramBotClient>().ToConstant(new TelegramBotClient(accessToken));
+            var proxy = new HttpToSocks5Proxy(
+                "proxy-host", 999, "username", "pwd"
+            );
+            proxy.ResolveHostnamesLocally = true;
+            Bind<ITelegramBotClient>().ToConstant(new TelegramBotClient(accessToken, proxy));
             Bind<IBot>().To<TgBot>();
         }
     }
