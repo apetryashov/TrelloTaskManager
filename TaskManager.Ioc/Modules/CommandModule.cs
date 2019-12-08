@@ -1,7 +1,8 @@
 using Ninject.Modules;
 using TaskManager.Bot.Telegram;
-using TaskManager.Bot.Telegram.Commands;
 using TaskManager.Common.Tasks;
+using TaskManaget.Bot;
+using TaskManaget.Bot.Commands;
 
 namespace TaskManager.Ioc.Modules
 {

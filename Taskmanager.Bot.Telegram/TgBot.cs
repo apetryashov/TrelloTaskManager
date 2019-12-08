@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using TaskManager.Bot.Telegram.Model;
-using TaskManager.Bot.Telegram.Model.Domain;
+using TaskManaget.Bot;
+using TaskManaget.Bot.Model;
+using TaskManaget.Bot.Model.Domain;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;

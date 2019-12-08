@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Common", "TaskM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Ioc", "TaskManager.Ioc\TaskManager.Ioc.csproj", "{D32B3297-348D-460F-9178-FE064893A53E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManaget.Bot", "TaskManaget.Bot\TaskManaget.Bot.csproj", "{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{D32B3297-348D-460F-9178-FE064893A53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D32B3297-348D-460F-9178-FE064893A53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D32B3297-348D-460F-9178-FE064893A53E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

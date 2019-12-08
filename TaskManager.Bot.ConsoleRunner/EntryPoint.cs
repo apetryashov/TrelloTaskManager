@@ -5,6 +5,7 @@ using Ninject;
 using TaskManager.Bot.Telegram;
 using TaskManager.Bot.Telegram.Credentials;
 using TaskManager.Ioc;
+using TaskManaget.Bot;
 
 namespace TaskManager.Bot.ConsoleRunner
 {

@@ -1,6 +1,6 @@
 using LiteDB;
 using Ninject.Modules;
-using TaskManager.Bot.Telegram.Commands;
+using TaskManaget.Bot.Authorization;
 
 namespace TaskManager.Ioc.Modules
 {
