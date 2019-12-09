@@ -1,22 +1,10 @@
-using TaskManaget.Bot.Model;
-using TaskManaget.Bot.Model.Session;
-
 namespace TaskManaget.Bot.Commands
 {
-    public class StubCommand : ICommand
+    public class StubCommand : TextCommand
     {
         public StubCommand(string commandTrigger, bool isPublicCommand = true)
+            : base(commandTrigger, "Данная функция пока не реализована", isPublicCommand)
         {
-            CommandTrigger = commandTrigger;
-            IsPublicCommand = isPublicCommand;
-        }
-
-        public bool IsPublicCommand { get; }
-        public string CommandTrigger { get; }
-
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
-        {
-            return new CommandResponse(TextResponse.CloseCommand("Данная функция пока не реализована"));
         }
     }
 }

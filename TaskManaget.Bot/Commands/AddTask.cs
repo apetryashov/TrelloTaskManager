@@ -22,6 +22,7 @@ namespace TaskManaget.Bot.Commands
                 "Отмена"
             },
         };
+
         public bool IsPublicCommand => true;
 
         private readonly ITaskHandler taskProvider;
@@ -98,14 +99,15 @@ namespace TaskManaget.Bot.Commands
                     (int) CommandStatus.Menu);
             taskInitializationStorage.Delete(task.Key);
             //trelloAuthorizationProvider saving logic
-            taskProvider.AddNewTask(author.UserToken, task).Wait();
+            task = taskProvider.AddNewTask(author.UserToken, task).Result;
+
             return new CommandResponse(TextResponse.CloseCommand(@$"
 Задача успешно добавлена!
 
 {task}
 "));
         }
-        
+
         private ICommandResponse AbortAction(Author author)
         {
             var task = taskInitializationStorage.Get(author.TelegramId);

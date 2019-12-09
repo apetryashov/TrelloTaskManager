@@ -18,11 +18,10 @@ namespace TaskManaget.Bot.Commands
             this.taskStatus = taskStatus;
         }
 
-        // public string CommandTrigger => "все активные задачи";
         public string CommandTrigger => taskStatus switch
         {
             TaskStatus.Active => "Все активные задачи",
-            TaskStatus.Inactive => "Все не активные задачи",
+            TaskStatus.Inactive => "Все неактивные задачи",
             TaskStatus.Resolved => "Все сделанные",
             _ => throw new ArgumentException($"unknown task status {taskStatus}")
         };

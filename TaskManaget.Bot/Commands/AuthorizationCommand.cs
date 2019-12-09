@@ -28,12 +28,15 @@ namespace TaskManaget.Bot.Commands
         private ICommandResponse StartAuthorization()
         {
             var message = @"
-Привет!
-Для для начала давай познакомимся.
-...
-тут какой-нибудь описательный текст
+Данный бот создан с целью упростить и перенести в telegram самый популярный сценарии использования trello.
+Почти все, кто создает доску в trello хотят решать задачу: новые задачи, задачи в прогрессе, сделанные задачи.
+
+Если ты тоже заинтересован в решение такой задачи, то смело переходи к авторизации!
 ";
             var response = ChainResponse.Create(SessionStatus.Expect)
+                .AddResponse(TextResponse.ExpectedCommand(@"
+Привет!
+Давай для начала мы расскажем что это за бот и как он может помочь тебе."))
                 .AddResponse(TextResponse.ExpectedCommand(message))
                 .AddResponse(GetHelpResponse());
 
@@ -49,7 +52,14 @@ namespace TaskManaget.Bot.Commands
             {
                 authorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
                 authorizationStorage.SetUserToken(commandInfo.Author, token);
-                return new CommandResponse(TextResponse.CloseCommand("Все круто"));
+                return new CommandResponse(TextResponse.CloseCommand(@$"
+Отлично! Авторизация успешно пройдена!
+
+Теперь в твоем Trello аккаунте появилась новая таблица `TrelloTaskManager`.
+В ней ты найдешь 3 листа, работа с которыми и происходит внутри этого бота.
+Так же, ты можешь сам зайти на доску и добавить задачу в нужный тебе лист.
+Данные автоматически будут синхронизированны.
+"));
             }
 
             var response = ChainResponse.Create(SessionStatus.Expect)
@@ -63,10 +73,11 @@ namespace TaskManaget.Bot.Commands
         {
             return TextResponse.ExpectedCommand(
                 @$"
-Тебе нужно перейте по указанной ссылке дать доступ к своим таблицам учтной записи нашего бота.
-Для этого тебе нужно перейти по ссылке {authorizationProvider.GetAuthorizationUrl()} и нажать кнопку <Разрешить>.
-Затем нужно отправить в ответном сообщении полученный тобой токен.
-Чуть позже этот процесс будет проще :(
+Чтобы пройти авторизацию, тебе нужно пройти лишь несколько шагов:
+1. Прейти по ссылке {authorizationProvider.GetAuthorizationUrl()} и нажать кнопку <Разрешить>.
+2. Затем нужно отправить в ответном сообщении полученный тобой токен.
+
+Чуть позже этот процесс будет еще проще :(
 ");
         }
 
