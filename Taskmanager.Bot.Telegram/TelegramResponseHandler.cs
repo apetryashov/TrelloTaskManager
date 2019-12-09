@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using TaskManaget.Bot.Model;
+using TaskManager.Bot.Model;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -20,7 +20,8 @@ namespace TaskManager.Bot.Telegram
                         replyMarkup: AsReplyKeyboardMarkup(buttonResponse.Buttons));
                     break;
                 case InlineButtonResponse buttonResponse:
-                    await bot.SendTextMessageAsync(chatId, buttonResponse.Text, replyMarkup: AsInlineButtonResponse(buttonResponse.Buttons));
+                    await bot.SendTextMessageAsync(chatId, buttonResponse.Text,
+                        replyMarkup: AsInlineButtonResponse(buttonResponse.Buttons));
                     break;
                 case ChainResponse chainResponse:
                     foreach (var chainResponseResponse in chainResponse.Responses)

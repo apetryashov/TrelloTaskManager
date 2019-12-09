@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manatee.Trello;
 using TaskManager.Common;
-using TaskManager.Common.Storage;
 
 namespace TaskManager.Trello
 {
@@ -60,6 +58,12 @@ namespace TaskManager.Trello
                 throw new Exception("невалидная доска"); //mb Result?
         }
 
+        public string GetAuthorizationUrl()
+        {
+            return
+                $"https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=TrelloTaskManager&key={appKey}";
+        }
+
         private async Task<IMe> GetMe(string userToken)
         {
             TrelloAuthorization.Default.AppKey =
@@ -68,8 +72,5 @@ namespace TaskManager.Trello
 
             return await factory.Me();
         }
-
-        public string GetAuthorizationUrl() =>
-            $"https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=TrelloTaskManager&key={appKey}";
     }
 }

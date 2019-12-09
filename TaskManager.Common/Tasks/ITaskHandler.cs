@@ -9,4 +9,4 @@ namespace TaskManager.Common.Tasks
         Task ChangeTaskStatus(string userToken, MyTask task, TaskStatus toTaskStatus);
         Task<MyTask> AddNewTask(string userToken, MyTask task);
     }
-}    
+}

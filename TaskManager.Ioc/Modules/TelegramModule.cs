@@ -1,7 +1,7 @@
 using MihaZupan;
 using Ninject.Modules;
+using TaskManager.Bot;
 using TaskManager.Bot.Telegram;
-using TaskManaget.Bot;
 using Telegram.Bot;
 
 namespace TaskManager.Ioc.Modules

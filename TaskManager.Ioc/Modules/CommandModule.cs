@@ -1,7 +1,7 @@
 using Ninject.Modules;
+using TaskManager.Bot;
+using TaskManager.Bot.Commands;
 using TaskManager.Common.Tasks;
-using TaskManaget.Bot;
-using TaskManaget.Bot.Commands;
 
 namespace TaskManager.Ioc.Modules
 {
@@ -17,7 +17,7 @@ namespace TaskManager.Ioc.Modules
             Bind<ICommand>().To<GetTaskInfo>();
             Bind<ICommand>().To<ChangeTaskStatusCommand>();
             Bind<ICommand>().ToConstant(new StubCommand("Статистика по задачам (в разработке)"));
-            Bind<ICommand>().ToConstant(new TextCommand("Road map",@$"
+            Bind<ICommand>().ToConstant(new TextCommand("Road map", @"
 В скором времени, в боте появится новый функционал:
 1. Напоминание о текущих задачах (с целью актуализации состояния)
 2. Статистика по задачам

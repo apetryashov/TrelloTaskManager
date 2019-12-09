@@ -1,6 +1,6 @@
 using LiteDB;
 using Ninject.Modules;
-using TaskManaget.Bot.Authorization;
+using TaskManager.Bot.Authorization;
 
 namespace TaskManager.Ioc.Modules
 {

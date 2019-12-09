@@ -2,10 +2,8 @@
 using System.IO;
 using Newtonsoft.Json;
 using Ninject;
-using TaskManager.Bot.Telegram;
 using TaskManager.Bot.Telegram.Credentials;
 using TaskManager.Ioc;
-using TaskManaget.Bot;
 
 namespace TaskManager.Bot.ConsoleRunner
 {
@@ -29,7 +27,7 @@ namespace TaskManager.Bot.ConsoleRunner
             };
 
             tgBot.OnError += Console.WriteLine;
-            
+
             tgBot.Start();
             Console.ReadLine();
             tgBot.Stop();

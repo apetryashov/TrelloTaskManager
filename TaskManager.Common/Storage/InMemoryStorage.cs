@@ -17,10 +17,7 @@ namespace TaskManager.Common.Storage
 
         public void Add(IEnumerable<TEntity> entities)
         {
-            foreach (var hasKey in entities)
-            {
-                keyValueStorage.Add(hasKey.Key, hasKey);
-            }
+            foreach (var hasKey in entities) keyValueStorage.Add(hasKey.Key, hasKey);
         }
 
         public void Update(TEntity entity)

@@ -9,9 +9,9 @@ namespace TaskManager.Common.Tasks
         public string Id { get; set; }
         public string Name { get; set; }
         [CanBeNull] public string Description { get; set; }
-        public long Key { get; set; }
         public string Url { get; set; }
         public TaskStatus Status { get; set; }
+        public long Key { get; set; }
 
         public override string ToString()
         {

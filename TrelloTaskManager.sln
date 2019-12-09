@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskmanager.Bot.Telegram", "Taskmanager.Bot.Telegram\Taskmanager.Bot.Telegram.csproj", "{7AB26A4A-6890-453C-8949-2B55FE58AA4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot.Telegram", "TaskManager.Bot.Telegram\TaskManager.Bot.Telegram.csproj", "{7AB26A4A-6890-453C-8949-2B55FE58AA4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot.ConsoleRunner", "TaskManager.Bot.ConsoleRunner\TaskManager.Bot.ConsoleRunner.csproj", "{01881776-AE08-4C2E-9A13-86361E90F46D}"
 EndProject
@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Common", "TaskM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Ioc", "TaskManager.Ioc\TaskManager.Ioc.csproj", "{D32B3297-348D-460F-9178-FE064893A53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManaget.Bot", "TaskManaget.Bot\TaskManaget.Bot.csproj", "{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot", "TaskManager.Bot\TaskManager.Bot.csproj", "{EA85D952-BA8B-402A-93CD-28DB3A94CBDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
