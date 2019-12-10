@@ -22,13 +22,6 @@ namespace TaskManager.Bot.Model
         public string Text { get; }
         public SessionStatus SessionStatus { get; }
 
-        private (string text, string callback)[][] AsInlineKeyboardMarkup((string text, string callback)[] buttons)
-        {
-            return buttons.Select(
-                    button => new[] {button})
-                .ToArray();
-        }
-
         public static InlineButtonResponse CreateWithHorizontalButtons(
             string text,
             (string text, string callback)[] buttons,

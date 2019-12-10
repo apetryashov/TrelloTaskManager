@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TaskManager.Bot.Model;
 using TaskManager.Bot.Model.Domain;
 using TaskManager.Bot.Model.Session;
@@ -9,6 +10,9 @@ namespace TaskManager.Bot.Commands
 {
     public class AddTask : ICommand
     {
+        private const int MaxTaskNameLength = 500;
+        private const int MaxTaskDescriptionLength = 1500;
+
         private readonly string[][] menuCommands =
         {
             new[]
@@ -78,6 +82,12 @@ namespace TaskManager.Bot.Commands
 
         private ICommandResponse SetNameAction(Author author, string taskName)
         {
+            if (taskName.Length > MaxTaskNameLength)
+                return GetMenu($"Максимальная длина названия - {MaxTaskNameLength}");
+
+            if (menuCommands.Any(x => x.Contains(taskName)))
+                return GetMenu($"Недопустимое название");
+
             var task = taskInitializationStorage.Get(author.TelegramId);
             task.Name = taskName;
             taskInitializationStorage.Update(task);
@@ -86,6 +96,12 @@ namespace TaskManager.Bot.Commands
 
         private ICommandResponse SetDescriptionAction(Author author, string taskDescription)
         {
+            if (taskDescription.Length > MaxTaskDescriptionLength)
+                return GetMenu($"Максимальная длина описания - {MaxTaskDescriptionLength}");
+
+            if (menuCommands.Any(x => x.Contains(taskDescription)))
+                return GetMenu($"Недопустимое описание");
+
             var task = taskInitializationStorage.Get(author.TelegramId);
             task.Description = taskDescription;
             taskInitializationStorage.Update(task);
@@ -99,7 +115,7 @@ namespace TaskManager.Bot.Commands
                 return new CommandResponse(TextResponse.ExpectedCommand("Задаче необходимо добавить имя"),
                     (int) CommandStatus.Menu);
             taskInitializationStorage.Delete(task.Key);
-            //trelloAuthorizationProvider saving logic
+
             task = taskProvider.AddNewTask(author.UserToken, task).Result;
 
             return new CommandResponse(TextResponse.CloseCommand(@$"

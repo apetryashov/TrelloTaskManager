@@ -48,12 +48,17 @@ namespace TaskManager.Bot.Commands
         {
             var token = commandInfo.Command;
 
+            var errorResponse = ChainResponse.Create(SessionStatus.Expect)
+                .AddResponse(TextResponse.ExpectedCommand("Что-то пошло не так, попробуйте еще раз"))
+                .AddResponse(GetHelpResponse());
 
             if (authorizationProvider.IsValidAuthorizationToken(token).Result)
             {
-                authorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
-                authorizationStorage.SetUserToken(commandInfo.Author, token);
-                return new CommandResponse(TextResponse.CloseCommand(@"
+                try
+                {
+                    authorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
+                    authorizationStorage.SetUserToken(commandInfo.Author, token);
+                    return new CommandResponse(TextResponse.CloseCommand(@"
 Отлично! Авторизация успешно пройдена!
 
 Теперь в твоем Trello аккаунте появилась новая таблица `TrelloTaskManager`.
@@ -61,13 +66,14 @@ namespace TaskManager.Bot.Commands
 Так же, ты можешь сам зайти на доску и добавить задачу в нужный тебе лист.
 Данные автоматически будут синхронизированны.
 "));
+                }
+                catch
+                {
+                    return new CommandResponse(errorResponse, (int) CommandStatus.AuthorizationError);
+                }
             }
 
-            var response = ChainResponse.Create(SessionStatus.Expect)
-                .AddResponse(TextResponse.ExpectedCommand("Что-то пошло не так, попробуйте еще раз"))
-                .AddResponse(GetHelpResponse());
-
-            return new CommandResponse(response, (int) CommandStatus.AuthorizationError);
+            return new CommandResponse(errorResponse, (int) CommandStatus.AuthorizationError);
         }
 
         private IResponse GetHelpResponse()

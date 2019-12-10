@@ -12,11 +12,11 @@ namespace TaskManager.Trello
         private readonly string appKey;
         private readonly ITrelloFactory factory;
 
-        private readonly string[] systemColumns =
+        private readonly string[][] systemColumns =
         {
-            "Нужно сделать",
-            "В процессе",
-            "Готово"
+            new[] {"Нужно сделать", "To Do"},
+            new[] {"В процессе", "Doing"},
+            new[] {"Готово", "Done"}
         };
 
         public TrelloAuthorizationProvider(AppKey appKey, ITrelloFactory trelloFactory)
@@ -50,12 +50,12 @@ namespace TaskManager.Trello
 
             var isValidCollection =
                 listCollection.Count() == 3 &&
-                listCollection[0].Name == systemColumns[0] &&
-                listCollection[1].Name == systemColumns[1] &&
-                listCollection[2].Name == systemColumns[2];
+                systemColumns[0].Contains(listCollection[0].Name) &&
+                systemColumns[1].Contains(listCollection[1].Name) &&
+                systemColumns[2].Contains(listCollection[2].Name);
 
             if (!isValidCollection)
-                throw new Exception("невалидная доска"); //mb Result?
+                throw new ArgumentException("не удалось инициализировать доску"); //mb Result?
         }
 
         public string GetAuthorizationUrl()
