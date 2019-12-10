@@ -82,7 +82,7 @@ namespace TaskManager.Bot.Commands
 
         private ICommandResponse SetNameAction(Author author, string taskName)
         {
-            if (taskName.Length > MaxTaskNameLength)
+            if (taskName.Length > MaxTaskNameLength) //test1
                 return GetMenu($"Максимальная длина названия - {MaxTaskNameLength}");
 
             if (menuCommands.Any(x => x.Contains(taskName)))
