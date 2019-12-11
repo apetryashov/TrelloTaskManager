@@ -86,7 +86,7 @@ namespace TaskManager.Bot.Commands
                 return GetMenu($"Максимальная длина названия - {MaxTaskNameLength}");
 
             if (menuCommands.Any(x => x.Contains(taskName)))
-                return GetMenu($"Недопустимое название");
+                return GetMenu("Недопустимое название");
 
             var task = taskInitializationStorage.Get(author.TelegramId);
             task.Name = taskName;
@@ -100,7 +100,7 @@ namespace TaskManager.Bot.Commands
                 return GetMenu($"Максимальная длина описания - {MaxTaskDescriptionLength}");
 
             if (menuCommands.Any(x => x.Contains(taskDescription)))
-                return GetMenu($"Недопустимое описание");
+                return GetMenu("Недопустимое описание");
 
             var task = taskInitializationStorage.Get(author.TelegramId);
             task.Description = taskDescription;

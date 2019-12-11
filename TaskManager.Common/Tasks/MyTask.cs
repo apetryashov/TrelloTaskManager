@@ -21,6 +21,8 @@ namespace TaskManager.Common.Tasks
             if (Description != null)
                 sb.AppendLine($"[Описание]: {Description}");
 
+            sb.AppendLine($"[Статус]: {Status.AsPrintableString()}");
+
             sb.AppendLine($@"
 
 Найти задачу вы всегда можете вызвав комманду /task_{Id}

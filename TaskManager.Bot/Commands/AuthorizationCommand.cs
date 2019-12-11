@@ -53,7 +53,6 @@ namespace TaskManager.Bot.Commands
                 .AddResponse(GetHelpResponse());
 
             if (authorizationProvider.IsValidAuthorizationToken(token).Result)
-            {
                 try
                 {
                     authorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
@@ -71,7 +70,6 @@ namespace TaskManager.Bot.Commands
                 {
                     return new CommandResponse(errorResponse, (int) CommandStatus.AuthorizationError);
                 }
-            }
 
             return new CommandResponse(errorResponse, (int) CommandStatus.AuthorizationError);
         }

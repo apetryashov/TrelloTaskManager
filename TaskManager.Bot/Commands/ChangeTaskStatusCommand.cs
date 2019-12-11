@@ -32,7 +32,8 @@ namespace TaskManager.Bot.Commands
             var myTask = taskProvider.GetTaskById(author.UserToken, taskId).Result;
             taskProvider.ChangeTaskStatus(author.UserToken, myTask, status).Wait();
 
-            return new CommandResponse(TextResponse.CloseCommand($"Статус задачи изменен на: {status}"));
+            return new CommandResponse(
+                TextResponse.CloseCommand($"Статус задачи изменен на: {status.AsPrintableString()}"));
         }
     }
 }
