@@ -9,14 +9,9 @@ namespace TaskManager.Bot.Authorization
         private readonly LiteCollection<AuthorizationInfo> collection;
 
         public LiteDbAuthorizationStorage(LiteDatabase liteDatabase)
-        {
-            collection = liteDatabase.GetCollection<AuthorizationInfo>();
-        }
+            => collection = liteDatabase.GetCollection<AuthorizationInfo>();
 
-        public bool IsAuthorizedUser(Author author)
-        {
-            return collection.Exists(x => x.TelegramId == author.TelegramId);
-        }
+        public bool IsAuthorizedUser(Author author) => collection.Exists(x => x.TelegramId == author.TelegramId);
 
         public string GetUserToken(Author author)
         {

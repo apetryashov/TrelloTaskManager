@@ -10,20 +10,14 @@ namespace TaskManager.Common.Storage
     {
         private readonly Dictionary<TKey, TEntity> keyValueStorage = new Dictionary<TKey, TEntity>();
 
-        public void Add(TEntity entity)
-        {
-            keyValueStorage.Add(entity.Key, entity);
-        }
+        public void Add(TEntity entity) => keyValueStorage.Add(entity.Key, entity);
 
         public void Add(IEnumerable<TEntity> entities)
         {
             foreach (var hasKey in entities) keyValueStorage.Add(hasKey.Key, hasKey);
         }
 
-        public void Update(TEntity entity)
-        {
-            keyValueStorage[entity.Key] = entity;
-        }
+        public void Update(TEntity entity) => keyValueStorage[entity.Key] = entity;
 
         public TEntity Get(TKey key)
         {
@@ -39,10 +33,7 @@ namespace TaskManager.Common.Storage
             return task;
         }
 
-        public void Delete(TKey key)
-        {
-            keyValueStorage.Remove(key);
-        }
+        public void Delete(TKey key) => keyValueStorage.Remove(key);
 
         public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
@@ -52,9 +43,6 @@ namespace TaskManager.Common.Storage
                 .Select(x => x.Value);
         }
 
-        public IEnumerable<TEntity> GetAll()
-        {
-            return keyValueStorage.Values;
-        }
+        public IEnumerable<TEntity> GetAll() => keyValueStorage.Values;
     }
 }

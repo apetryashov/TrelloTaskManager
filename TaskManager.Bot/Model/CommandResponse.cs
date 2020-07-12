@@ -4,10 +4,7 @@ namespace TaskManager.Bot.Model
 {
     public class CommandResponse : ICommandResponse
     {
-        public CommandResponse(IResponse response)
-        {
-            Response = response;
-        }
+        public CommandResponse(IResponse response) => Response = response;
 
         public CommandResponse(IResponse response, int sessionMeta)
         {

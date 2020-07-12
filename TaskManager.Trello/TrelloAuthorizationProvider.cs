@@ -59,13 +59,11 @@ namespace TaskManager.Trello
         }
 
         public string GetAuthorizationUrl()
-        {
-            return
-                $"https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=TrelloTaskManager&key={appKey}";
-        }
+            => $"https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=TrelloTaskManager&key={appKey}";
 
         private async Task<IMe> GetMe(string userToken)
         {
+            
             TrelloAuthorization.Default.AppKey =
                 appKey; // it will not work with multithreading. https://github.com/gregsdennis/Manatee.TrelloAuthorizationProvider/issues/313
             TrelloAuthorization.Default.UserToken = userToken;

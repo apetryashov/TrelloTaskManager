@@ -17,10 +17,7 @@ namespace TaskManager.Bot.Model
 
         public SessionStatus SessionStatus { get; }
 
-        public static ChainResponse Create(SessionStatus sessionStatus)
-        {
-            return new ChainResponse(sessionStatus);
-        }
+        public static ChainResponse Create(SessionStatus sessionStatus) => new ChainResponse(sessionStatus);
 
         public ChainResponse AddResponse(IResponse response)
         {

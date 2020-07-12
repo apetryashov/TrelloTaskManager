@@ -12,12 +12,13 @@ namespace TaskManager.Bot
         private const string AuthorizationCommand = "/authorize";
         private readonly IAuthorizationStorage authorizationStorage;
         private readonly ICommand[] commands;
-        private readonly ISessionStorage sessionStorage = new InMemorySessionStorage();
+        private readonly ISessionStorage sessionStorage;
 
-        public RequestHandler(IAuthorizationStorage authorizationStorage, ICommand[] commands)
+        public RequestHandler(IAuthorizationStorage authorizationStorage, ICommand[] commands, ISessionStorage sessionStorage)
         {
             this.authorizationStorage = authorizationStorage;
             this.commands = commands;
+            this.sessionStorage = sessionStorage;
         }
 
         public IResponse GetResponse(IRequest request)
@@ -80,19 +81,13 @@ namespace TaskManager.Bot
             return default;
         }
 
-        private string[][] GetMenu()
-        {
-            return commands
-                .Where(x => x.IsPublicCommand)
-                .Select(x => x.CommandTrigger)
-                .ToArray()
-                .AsDoubleArray(3);
-            ;
-        }
+        private string[][] GetMenu() => commands
+            .Where(x => x.IsPublicCommand)
+            .Select(x => x.CommandTrigger)
+            .ToArray()
+            .AsDoubleArray(3);
 
         private bool IsAuthorizationCommand(ISession session)
-        {
-            return commands[session.CommandId].CommandTrigger == AuthorizationCommand;
-        }
+            => commands[session.CommandId].CommandTrigger == AuthorizationCommand;
     }
 }

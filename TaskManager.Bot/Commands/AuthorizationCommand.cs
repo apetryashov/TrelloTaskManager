@@ -21,10 +21,9 @@ namespace TaskManager.Bot.Commands
         public bool IsPublicCommand => false;
         public string CommandTrigger => "/authorize";
 
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
-        {
-            return commandInfo.SessionMeta == null ? StartAuthorization() : ContinueAuthorization(commandInfo);
-        }
+        public ICommandResponse StartCommand(ICommandInfo commandInfo) => commandInfo.SessionMeta == null
+            ? StartAuthorization()
+            : ContinueAuthorization(commandInfo);
 
         private ICommandResponse StartAuthorization()
         {
@@ -74,17 +73,14 @@ namespace TaskManager.Bot.Commands
             return new CommandResponse(errorResponse, (int) CommandStatus.AuthorizationError);
         }
 
-        private IResponse GetHelpResponse()
-        {
-            return TextResponse.ExpectedCommand(
-                @$"
+        private IResponse GetHelpResponse() => TextResponse.ExpectedCommand(
+            @$"
 Чтобы пройти авторизацию, тебе нужно пройти лишь несколько шагов:
 1. Прейти по ссылке {authorizationProvider.GetAuthorizationUrl()} и нажать кнопку <Разрешить>.
 2. Затем нужно отправить в ответном сообщении полученный тобой токен.
 
 Чуть позже этот процесс будет еще проще :(
 ");
-        }
 
         private enum CommandStatus
         {

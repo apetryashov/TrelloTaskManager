@@ -34,9 +34,7 @@ namespace TaskManager.Trello
         }
 
         public async Task<MyTask[]> GetAllTasks(string userToken, TaskStatus status)
-        {
-            return await GetAllColumnTasks(userToken, status);
-        }
+            => await GetAllColumnTasks(userToken, status);
 
         public async Task ChangeTaskStatus(string userToken, MyTask task, TaskStatus toTaskStatus)
         {
@@ -150,17 +148,14 @@ namespace TaskManager.Trello
             return boardInfo;
         }
 
-        private MyTask ToTrelloTask(ICard card, TaskStatus status)
+        private MyTask ToTrelloTask(ICard card, TaskStatus status) => new MyTask
         {
-            return new MyTask
-            {
-                Name = card.Name,
-                Description = card.Description,
-                Id = card.Id,
-                Url = card.ShortUrl,
-                Status = status
-            };
-        }
+            Name = card.Name,
+            Description = card.Description,
+            Id = card.Id,
+            Url = card.ShortUrl,
+            Status = status
+        };
 
         private class BoardInfo
         {

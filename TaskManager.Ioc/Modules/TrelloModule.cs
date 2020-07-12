@@ -1,26 +1,23 @@
 using Manatee.Trello;
-using Ninject.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using TaskManager.Common;
 using TaskManager.Common.Tasks;
 using TaskManager.Trello;
 
 namespace TaskManager.Ioc.Modules
 {
-    public class TrelloModule : NinjectModule
+    public class TrelloModule : IServiceModule
     {
         private readonly string appKey;
 
-        public TrelloModule(string appKey)
-        {
-            this.appKey = appKey;
-        }
+        public TrelloModule(string appKey) => this.appKey = appKey;
 
-        public override void Load()
+        public void Load(IServiceCollection services)
         {
-            Bind<AppKey>().ToConstant(new AppKey {Key = appKey});
-            Bind<ITrelloFactory>().To<TrelloFactory>();
-            Bind<ITaskHandler>().To<TrelloTasksHandler>();
-            Bind<IAuthorizationProvider>().To<TrelloAuthorizationProvider>();
+            services.AddSingleton(new AppKey {Key = appKey});
+            services.AddScoped<ITrelloFactory, TrelloFactory>();
+            services.AddScoped<ITaskHandler, TrelloTasksHandler>();
+            services.AddScoped<IAuthorizationProvider, TrelloAuthorizationProvider>();
         }
     }
 }

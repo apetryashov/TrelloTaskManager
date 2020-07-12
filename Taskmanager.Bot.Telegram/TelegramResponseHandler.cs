@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManager.Bot.Model;
@@ -30,19 +31,14 @@ namespace TaskManager.Bot.Telegram
             }
         }
 
-        private static ReplyKeyboardMarkup AsReplyKeyboardMarkup(string[][] buttons)
-        {
-            return buttons;
-        }
+        private static ReplyKeyboardMarkup AsReplyKeyboardMarkup(string[][] buttons) => buttons;
 
-        private static InlineKeyboardMarkup AsInlineButtonResponse((string text, string callback)[][] buttons)
-        {
-            return buttons
+        private static InlineKeyboardMarkup AsInlineButtonResponse(IEnumerable<(string text, string callback)[]> buttons)
+            => buttons
                 .Select(rows =>
                     rows.Select(
                             column => InlineKeyboardButton.WithCallbackData(column.text, column.callback))
                         .ToArray()
                 ).ToArray();
-        }
     }
 }

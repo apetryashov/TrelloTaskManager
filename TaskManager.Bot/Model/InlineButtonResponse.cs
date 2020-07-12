@@ -26,9 +26,7 @@ namespace TaskManager.Bot.Model
             string text,
             (string text, string callback)[] buttons,
             SessionStatus sessionStatus)
-        {
-            return new InlineButtonResponse(text, new[] {buttons}, sessionStatus);
-        }
+            => new InlineButtonResponse(text, new[] {buttons}, sessionStatus);
 
         public static InlineButtonResponse CreateWithVerticalButtons(
             string text,

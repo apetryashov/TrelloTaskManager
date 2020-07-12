@@ -17,8 +17,6 @@ namespace TaskManager.Bot.Model.Session
         }
 
         public bool TryGetUserSession(Author author, out ISession session)
-        {
-            return usersActiveSessions.TryGetValue(author.TelegramId, out session);
-        }
+            => usersActiveSessions.TryGetValue(author.TelegramId, out session);
     }
 }

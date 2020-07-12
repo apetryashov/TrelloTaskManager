@@ -20,8 +20,6 @@ namespace TaskManager.Bot.Commands
         public string CommandTrigger { get; }
 
         public ICommandResponse StartCommand(ICommandInfo commandInfo)
-        {
-            return new CommandResponse(TextResponse.CloseCommand(message));
-        }
+            => new CommandResponse(TextResponse.CloseCommand(message));
     }
 }

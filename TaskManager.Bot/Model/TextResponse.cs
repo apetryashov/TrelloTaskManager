@@ -16,24 +16,12 @@ namespace TaskManager.Bot.Model
         public string Text { get; }
         public SessionStatus SessionStatus { get; }
 
-        public static IResponse ExpectedCommand(string text)
-        {
-            return new TextResponse(text, SessionStatus.Expect);
-        }
+        public static IResponse ExpectedCommand(string text) => new TextResponse(text, SessionStatus.Expect);
 
-        public static IResponse CloseCommand(string text)
-        {
-            return new TextResponse(text, SessionStatus.Close);
-        }
+        public static IResponse CloseCommand(string text) => new TextResponse(text, SessionStatus.Close);
 
-        public static IResponse AbortCommand(string text)
-        {
-            return new TextResponse(text, SessionStatus.Abort);
-        }
+        public static IResponse AbortCommand(string text) => new TextResponse(text, SessionStatus.Abort);
 
-        public IResponse AsButton(string[][] keyboard)
-        {
-            return new ButtonResponse(Text, keyboard, SessionStatus);
-        }
+        public IResponse AsButton(string[][] keyboard) => new ButtonResponse(Text, keyboard, SessionStatus);
     }
 }

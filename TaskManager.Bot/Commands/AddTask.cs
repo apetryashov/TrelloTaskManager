@@ -41,12 +41,9 @@ namespace TaskManager.Bot.Commands
 
         public string CommandTrigger => "добавить задачу";
 
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
-        {
-            return commandInfo.SessionMeta == null
-                ? GetMenu("мы начинаем")
-                : StartCommand(commandInfo.Author, commandInfo.Command, commandInfo.SessionMeta);
-        }
+        public ICommandResponse StartCommand(ICommandInfo commandInfo) => commandInfo.SessionMeta == null
+            ? GetMenu("мы начинаем")
+            : StartCommand(commandInfo.Author, commandInfo.Command, commandInfo.SessionMeta);
 
         private ICommandResponse StartCommand(Author author, string commandText, ISessionMeta meta)
         {
@@ -56,29 +53,24 @@ namespace TaskManager.Bot.Commands
         }
 
         private ICommandResponse GetResponse(Author author, string commandText, ISessionMeta meta)
-        {
-            return (CommandStatus) meta.ContinueFrom switch
+            => (CommandStatus) meta.ContinueFrom switch
             {
                 CommandStatus.Menu => ToMenuAction(author, commandText),
                 CommandStatus.SetDescription => SetDescriptionAction(author, commandText),
                 CommandStatus.SetName => SetNameAction(author, commandText),
                 _ => throw new Exception() //add message
             };
-        }
 
-        private ICommandResponse ToMenuAction(Author author, string commandText)
+        private ICommandResponse ToMenuAction(Author author, string commandText) => commandText switch
         {
-            return commandText switch
-            {
-                "Добавить название" => new CommandResponse(TextResponse.ExpectedCommand("Введите название"),
-                    (int) CommandStatus.SetName),
-                "Добавить описание" => new CommandResponse(TextResponse.ExpectedCommand("Введите описание"),
-                    (int) CommandStatus.SetDescription),
-                "Сохранить" => SaveAction(author),
-                "Отмена" => AbortAction(author),
-                _ => GetMenu("Попробуй еще")
-            };
-        }
+            "Добавить название" => new CommandResponse(TextResponse.ExpectedCommand("Введите название"),
+                (int) CommandStatus.SetName),
+            "Добавить описание" => new CommandResponse(TextResponse.ExpectedCommand("Введите описание"),
+                (int) CommandStatus.SetDescription),
+            "Сохранить" => SaveAction(author),
+            "Отмена" => AbortAction(author),
+            _ => GetMenu("Попробуй еще")
+        };
 
         private ICommandResponse SetNameAction(Author author, string taskName)
         {
@@ -133,13 +125,10 @@ namespace TaskManager.Bot.Commands
             return new CommandResponse(TextResponse.AbortCommand("Отменено"));
         }
 
-        private ICommandResponse GetMenu(string message)
-        {
-            return new CommandResponse(
-                new ButtonResponse(message, menuCommands, SessionStatus.Expect),
-                (int) CommandStatus.Menu
-            );
-        }
+        private ICommandResponse GetMenu(string message) => new CommandResponse(
+            new ButtonResponse(message, menuCommands, SessionStatus.Expect),
+            (int) CommandStatus.Menu
+        );
 
         private enum CommandStatus
         {

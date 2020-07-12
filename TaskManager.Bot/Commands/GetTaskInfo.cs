@@ -8,10 +8,7 @@ namespace TaskManager.Bot.Commands
     {
         private readonly ITaskHandler taskProvider;
 
-        public GetTaskInfo(ITaskHandler taskProvider)
-        {
-            this.taskProvider = taskProvider;
-        }
+        public GetTaskInfo(ITaskHandler taskProvider) => this.taskProvider = taskProvider;
 
         public bool IsPublicCommand => false;
         public string CommandTrigger => "/task";
@@ -30,26 +27,23 @@ namespace TaskManager.Bot.Commands
             return new CommandResponse(response);
         }
 
-        private (string text, string callback)[] GetButtons(TaskStatus status, string taskId)
+        private (string text, string callback)[] GetButtons(TaskStatus status, string taskId) => status switch
         {
-            return status switch
+            TaskStatus.Inactive => new (string text, string callback)[]
             {
-                TaskStatus.Inactive => new (string text, string callback)[]
-                {
-                    ("-> Делаю", $"/changeTaskStatus_{TaskStatus.Active}_{taskId}"),
-                    ("-> Сделал", $"/changeTaskStatus_{TaskStatus.Resolved}_{taskId}")
-                },
-                TaskStatus.Active => new (string text, string callback)[]
-                {
-                    ("Сделаю <-", $"/changeTaskStatus_{TaskStatus.Inactive}_{taskId}"),
-                    ("-> Сделал", $"/changeTaskStatus_{TaskStatus.Resolved}_{taskId}")
-                },
-                TaskStatus.Resolved => new (string text, string callback)[]
-                {
-                    ("Сделаю <-", $"/changeTaskStatus_{TaskStatus.Inactive}_{taskId}"),
-                    ("Делаю <-", $"/changeTaskStatus_{TaskStatus.Active}_{taskId}")
-                }
-            };
-        }
+                ("-> Делаю", $"/changeTaskStatus_{TaskStatus.Active}_{taskId}"),
+                ("-> Сделал", $"/changeTaskStatus_{TaskStatus.Resolved}_{taskId}")
+            },
+            TaskStatus.Active => new (string text, string callback)[]
+            {
+                ("Сделаю <-", $"/changeTaskStatus_{TaskStatus.Inactive}_{taskId}"),
+                ("-> Сделал", $"/changeTaskStatus_{TaskStatus.Resolved}_{taskId}")
+            },
+            TaskStatus.Resolved => new (string text, string callback)[]
+            {
+                ("Сделаю <-", $"/changeTaskStatus_{TaskStatus.Inactive}_{taskId}"),
+                ("Делаю <-", $"/changeTaskStatus_{TaskStatus.Active}_{taskId}")
+            }
+        };
     }
 }

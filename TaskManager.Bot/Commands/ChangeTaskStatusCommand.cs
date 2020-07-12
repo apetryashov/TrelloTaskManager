@@ -12,10 +12,7 @@ namespace TaskManager.Bot.Commands
 
         private readonly ITaskHandler taskProvider;
 
-        public ChangeTaskStatusCommand(ITaskHandler taskProvider)
-        {
-            this.taskProvider = taskProvider;
-        }
+        public ChangeTaskStatusCommand(ITaskHandler taskProvider) => this.taskProvider = taskProvider;
 
         public bool IsPublicCommand => false;
         public string CommandTrigger => "/changeTaskStatus";

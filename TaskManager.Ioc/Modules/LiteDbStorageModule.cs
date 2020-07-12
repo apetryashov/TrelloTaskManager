@@ -1,15 +1,21 @@
 using LiteDB;
-using Ninject.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using TaskManager.Bot.Authorization;
 
 namespace TaskManager.Ioc.Modules
 {
-    public class LiteDbStorageModule : NinjectModule
+    public class LiteDbStorageModule : IServiceModule
     {
-        public override void Load()
+        public void Load(IServiceCollection services)
         {
-            Bind<LiteDatabase>().ToConstant(new LiteDatabase("MyDb"));
-            Bind<IAuthorizationStorage>().To<LiteDbAuthorizationStorage>().InSingletonScope();
+            services.AddSingleton(new LiteDatabase("MyDb"));
+            services.AddSingleton<IAuthorizationStorage, LiteDbAuthorizationStorage>();
         }
+    }
+
+    public class InMemoryAuthorizationStorageModule : IServiceModule
+    {
+        public void Load(IServiceCollection services)
+            => services.AddSingleton<IAuthorizationStorage, InMemoryAuthorizationStorage>();
     }
 }
