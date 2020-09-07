@@ -10,10 +10,7 @@ namespace TaskManager.Ioc
         public static IServiceCollection AddModules(this IServiceCollection services,
             IEnumerable<IServiceModule> modules)
         {
-            foreach (var module in modules)
-            {
-                module.Load(services);
-            }
+            foreach (var module in modules) module.Load(services);
 
             return services;
         }

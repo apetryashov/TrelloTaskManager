@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TaskManager.Bot.Authorization;
 using TaskManager.Bot.Model.Session;
 using TaskManager.Bot.WebHook.Services;
 using TaskManager.Ioc;
@@ -20,17 +20,18 @@ namespace TaskManager.Bot.WebHook
         public void ConfigureServices(IServiceCollection services)
         {
             var botConfiguration = Configuration.GetSection("BotConfiguration").Get<BotConfiguration>();
+            var mongoConnectionProperties =
+                Configuration.GetSection("MongoConfiguration").Get<MongoConnectionProperties>();
 
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddScoped<IRequestHandler, RequestHandler>();
-            services.AddSingleton<ISessionStorage, InMemorySessionStorage>();
+            services.AddSingleton<ISessionStorage, MongoDbSessionstorage>();
 
             services
                 .AddModule(new TelegramBotModule(botConfiguration))
                 .AddModule(new TrelloModule(botConfiguration.AccessToken))
                 .AddModule<CommandModule>()
-                //.AddModule<LiteDbStorageModule>()
-                .AddModule<InMemoryAuthorizationStorageModule>()
+                .AddModule(new MongoDbAuthorizationStorageModule(mongoConnectionProperties))
                 .AddControllers()
                 .AddNewtonsoftJson();
         }

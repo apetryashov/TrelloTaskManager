@@ -33,7 +33,8 @@ namespace TaskManager.Bot.Telegram
 
         private static ReplyKeyboardMarkup AsReplyKeyboardMarkup(string[][] buttons) => buttons;
 
-        private static InlineKeyboardMarkup AsInlineButtonResponse(IEnumerable<(string text, string callback)[]> buttons)
+        private static InlineKeyboardMarkup AsInlineButtonResponse(
+            IEnumerable<(string text, string callback)[]> buttons)
             => buttons
                 .Select(rows =>
                     rows.Select(

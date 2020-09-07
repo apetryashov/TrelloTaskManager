@@ -4,8 +4,7 @@ namespace TaskManager.Bot.Authorization
 {
     public interface IAuthorizationStorage
     {
-        bool IsAuthorizedUser(Author author);
-        string GetUserToken(Author author);
+        bool TryGetUserToken(Author author, out string token);
         void SetUserToken(Author author, string token);
     }
 }

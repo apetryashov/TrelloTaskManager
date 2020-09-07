@@ -14,7 +14,8 @@ namespace TaskManager.Bot
         private readonly ICommand[] commands;
         private readonly ISessionStorage sessionStorage;
 
-        public RequestHandler(IAuthorizationStorage authorizationStorage, ICommand[] commands, ISessionStorage sessionStorage)
+        public RequestHandler(IAuthorizationStorage authorizationStorage, ICommand[] commands,
+            ISessionStorage sessionStorage)
         {
             this.authorizationStorage = authorizationStorage;
             this.commands = commands;
@@ -41,7 +42,10 @@ namespace TaskManager.Bot
         private IResponse Execute(Author author, string commandText, ISession session)
         {
             if (!IsAuthorizationCommand(session))
-                author.UserToken = authorizationStorage.GetUserToken(author);
+            {
+                authorizationStorage.TryGetUserToken(author, out var token);
+                author.UserToken = token;
+            }
 
             var command = commands[session.CommandId];
             var commandInfo = new CommandInfo(author, commandText, session.SessionMeta);
@@ -54,10 +58,10 @@ namespace TaskManager.Bot
 
         private IResponse Execute(Author author, string commandText)
         {
-            if (!authorizationStorage.IsAuthorizedUser(author))
+            if (!authorizationStorage.TryGetUserToken(author, out var token))
                 commandText = AuthorizationCommand;
             else
-                author.UserToken = authorizationStorage.GetUserToken(author);
+                author.UserToken = token;
 
             var (command, commandIndex) = GetCommandByPrefix(commandText);
 

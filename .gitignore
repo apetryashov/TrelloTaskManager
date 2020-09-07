@@ -22,6 +22,8 @@ Thumbs.db
 [Bb]in
 [Dd]ebug*/
 .idea
+.vs
+.vscode
 *.lib
 *.sbr
 obj/

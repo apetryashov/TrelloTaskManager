@@ -63,7 +63,6 @@ namespace TaskManager.Trello
 
         private async Task<IMe> GetMe(string userToken)
         {
-            
             TrelloAuthorization.Default.AppKey =
                 appKey; // it will not work with multithreading. https://github.com/gregsdennis/Manatee.TrelloAuthorizationProvider/issues/313
             TrelloAuthorization.Default.UserToken = userToken;
