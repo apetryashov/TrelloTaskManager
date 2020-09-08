@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TaskManager.Bot.Model.Session;
 
 namespace TaskManager.Bot.Model
 {
@@ -7,17 +6,11 @@ namespace TaskManager.Bot.Model
     {
         private readonly List<IResponse> responses;
 
-        private ChainResponse(SessionStatus sessionStatus)
-        {
-            SessionStatus = sessionStatus;
-            responses = new List<IResponse>();
-        }
+        private ChainResponse() => responses = new List<IResponse>();
 
         public IEnumerable<IResponse> Responses => responses;
 
-        public SessionStatus SessionStatus { get; }
-
-        public static ChainResponse Create(SessionStatus sessionStatus) => new ChainResponse(sessionStatus);
+        public static ChainResponse Create() => new ChainResponse();
 
         public ChainResponse AddResponse(IResponse response)
         {

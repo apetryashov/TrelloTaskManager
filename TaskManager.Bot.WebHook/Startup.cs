@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TaskManager.Bot.Authorization;
-using TaskManager.Bot.Model.Session;
 using TaskManager.Bot.WebHook.Services;
 using TaskManager.Ioc;
 using TaskManager.Ioc.Modules;
@@ -25,7 +24,6 @@ namespace TaskManager.Bot.WebHook
 
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddScoped<IRequestHandler, RequestHandler>();
-            services.AddSingleton<ISessionStorage, MongoDbSessionstorage>();
 
             services
                 .AddModule(new TelegramBotModule(botConfiguration))

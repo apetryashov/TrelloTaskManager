@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using TaskManager.Bot.Model;
-using TaskManager.Bot.Model.Session;
 using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Commands
@@ -27,13 +26,12 @@ namespace TaskManager.Bot.Commands
             _ => throw new ArgumentException($"unknown task status {taskStatus}")
         };
 
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
+        public IResponse StartCommand(ICommandInfo commandInfo)
         {
             var tasks = taskProvider.GetAllTasks(commandInfo.Author.UserToken, taskStatus).Result;
 
             var buttons = tasks.Select(x => (x.Name, $"/task_{x.Id}")).ToArray();
-            var response = InlineButtonResponse.CreateWithVerticalButtons(CommandTrigger, buttons, SessionStatus.Close);
-            return new CommandResponse(response);
+            return InlineButtonResponse.CreateWithVerticalButtons(CommandTrigger, buttons);
         }
     }
 }

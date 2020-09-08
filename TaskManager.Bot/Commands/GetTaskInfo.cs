@@ -1,5 +1,4 @@
 using TaskManager.Bot.Model;
-using TaskManager.Bot.Model.Session;
 using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Commands
@@ -13,18 +12,15 @@ namespace TaskManager.Bot.Commands
         public bool IsPublicCommand => false;
         public string CommandTrigger => "/task";
 
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
+        public IResponse StartCommand(ICommandInfo commandInfo)
         {
             var taskId = commandInfo.Command.Substring(CommandTrigger.Length + 1);
             var task = taskProvider.GetTaskById(commandInfo.Author.UserToken, taskId).Result;
 
-            var response = InlineButtonResponse.CreateWithHorizontalButtons(
+            return InlineButtonResponse.CreateWithHorizontalButtons(
                 task.ToString(),
-                GetButtons(task.Status, taskId),
-                SessionStatus.Close
+                GetButtons(task.Status, taskId)
             );
-
-            return new CommandResponse(response);
         }
 
         private (string text, string callback)[] GetButtons(TaskStatus status, string taskId) => status switch

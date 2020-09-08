@@ -6,7 +6,7 @@ namespace TaskManager.Bot.Commands
     {
         private readonly string message;
 
-        public TextCommand(
+        protected TextCommand(
             string commandTrigger,
             string message,
             bool isPublicCommand = true)
@@ -19,7 +19,6 @@ namespace TaskManager.Bot.Commands
         public bool IsPublicCommand { get; }
         public string CommandTrigger { get; }
 
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
-            => new CommandResponse(TextResponse.CloseCommand(message));
+        public IResponse StartCommand(ICommandInfo commandInfo) => TextResponse.Create(message);
     }
 }

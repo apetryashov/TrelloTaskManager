@@ -27,12 +27,11 @@ namespace TaskManager.Bot.Authorization
             return true;
         }
 
-        public void SetUserToken(Author author, string token) =>
-            collection.InsertOne(new AuthorizationInfo
-            {
-                TelegramId = author.TelegramId,
-                Token = token
-            });
+        public void SetUserToken(Author author, string token) => collection.InsertOne(new AuthorizationInfo
+        {
+            TelegramId = author.TelegramId,
+            Token = token
+        });
 
         private class AuthorizationInfo
         {

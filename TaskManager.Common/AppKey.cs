@@ -1,8 +1,6 @@
-using TaskManager.Common.Storage;
-
 namespace TaskManager.Common
 {
-    public class AppKey : IHasKey<string>
+    public class AppKey
     {
         public string Key { get; set; }
     }

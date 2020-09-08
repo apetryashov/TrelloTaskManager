@@ -17,7 +17,7 @@ namespace TaskManager.Bot.Commands
         public bool IsPublicCommand => false;
         public string CommandTrigger => "/changeTaskStatus";
 
-        public ICommandResponse StartCommand(ICommandInfo commandInfo)
+        public IResponse StartCommand(ICommandInfo commandInfo)
         {
             var command = commandInfo.Command;
             var author = commandInfo.Author;
@@ -29,8 +29,7 @@ namespace TaskManager.Bot.Commands
             var myTask = taskProvider.GetTaskById(author.UserToken, taskId).Result;
             taskProvider.ChangeTaskStatus(author.UserToken, myTask, status).Wait();
 
-            return new CommandResponse(
-                TextResponse.CloseCommand($"Статус задачи изменен на: {status.AsPrintableString()}"));
+            return TextResponse.Create($"Статус задачи изменен на: {status.AsPrintableString()}");
         }
     }
 }

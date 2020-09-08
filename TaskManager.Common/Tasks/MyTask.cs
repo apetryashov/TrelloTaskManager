@@ -1,17 +1,15 @@
 using System.Text;
 using JetBrains.Annotations;
-using TaskManager.Common.Storage;
 
 namespace TaskManager.Common.Tasks
 {
-    public class MyTask : IHasKey<long>
+    public class MyTask
     {
         public string Id { get; set; }
         public string Name { get; set; }
         [CanBeNull] public string Description { get; set; }
         public string Url { get; set; }
-        public TaskStatus Status { get; set; }
-        public long Key { get; set; }
+        public TaskStatus Status { get; set; } = TaskStatus.Inactive;
 
         public override string ToString()
         {
