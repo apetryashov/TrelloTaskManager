@@ -4,7 +4,7 @@ using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Commands
 {
-    public class AddTask : IDefaultCommand
+    public class AddTask : ICommand
     {
         private const char TelegramNewLineChar = '\n';
         private readonly ITaskHandler taskProvider;

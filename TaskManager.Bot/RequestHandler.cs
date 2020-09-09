@@ -9,22 +9,24 @@ namespace TaskManager.Bot
 {
     public class RequestHandler : IRequestHandler
     {
-        private const string AuthorizationCommand = "/authorize";
         private readonly AuthorizationCommand authorizationCommand;
         private readonly IAuthorizationStorage authorizationStorage;
-        private readonly ICommand[] commands;
-        private readonly IDefaultCommand defaultCommand;
+        private readonly ICommandWithPrefixValidation[] commandsWithPrefixValidation;
+        private readonly ICommand defaultCommand;
+        private readonly ITextButtonMenuProvider textButtonMenuProvider;
 
         public RequestHandler(
             IAuthorizationStorage authorizationStorage,
             AuthorizationCommand authorizationCommand,
-            ICommand[] commands,
-            IDefaultCommand defaultCommand)
+            ICommandWithPrefixValidation[] commandsWithPrefixValidation,
+            ICommand defaultCommand,
+            ITextButtonMenuProvider textButtonMenuProvider)
         {
             this.authorizationStorage = authorizationStorage;
-            this.commands = commands;
+            this.commandsWithPrefixValidation = commandsWithPrefixValidation;
             this.authorizationCommand = authorizationCommand;
             this.defaultCommand = defaultCommand;
+            this.textButtonMenuProvider = textButtonMenuProvider;
         }
 
         public IResponse GetResponse(IRequest request)
@@ -32,10 +34,14 @@ namespace TaskManager.Bot
             var author = request.Author;
 
             var commandText = request.Command;
+
+            if (authorizationStorage.TryGetUserToken(author, out var token))
+                author.UserToken = token;
+
             var response = Execute(author, commandText);
 
             if (response is TextResponse textResponse)
-                response = textResponse.AsButton(GetMenu());
+                response = textResponse.AsButton(GetMenu(author));
 
             // throw if not TextResponse?
 
@@ -44,26 +50,22 @@ namespace TaskManager.Bot
 
         private IResponse Execute(Author author, string commandText)
         {
-            if (authorizationStorage.TryGetUserToken(author, out var token))
-                author.UserToken = token;
-
             var commandInfo = new CommandInfo(author, commandText);
 
-            var command = token == null
+            var command = author.UserToken == null
                 ? authorizationCommand
                 : GetCommandByPrefix(commandText);
 
             return command.StartCommand(commandInfo);
         }
 
-        private IDefaultCommand GetCommandByPrefix(string textCommand)
-            => commands.FirstOrDefault(command => textCommand.StartsWith(command.CommandTrigger))
-               ?? defaultCommand;
+        private ICommand GetCommandByPrefix(string textCommand) =>
+            commandsWithPrefixValidation
+                .FirstOrDefault(c => c.IsValidCommand(textCommand))
+            ?? defaultCommand;
 
-        private string[][] GetMenu() => commands
-            .Where(x => x.IsPublicCommand)
-            .Select(x => x.CommandTrigger)
-            .ToArray()
-            .AsDoubleArray(3);
+        private string[] GetMenu(Author author) =>
+            textButtonMenuProvider
+                .GetButtons(author);
     }
 }

@@ -7,8 +7,7 @@ namespace TaskManager.Bot.Commands
         public HelpCommand()
             : base(
                 "/help", 
-                HelpMessage, 
-                false)
+                HelpMessage)
         {
         }
     }

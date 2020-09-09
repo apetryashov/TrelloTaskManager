@@ -4,7 +4,7 @@ namespace TaskManager.Bot.Model
 {
     public class ButtonResponse : IResponse
     {
-        public ButtonResponse(string text, string[][] buttons)
+        public ButtonResponse(string text, string[] buttons)
         {
             if (text.Length == 0)
                 throw new ArgumentException("Empty response text");
@@ -12,7 +12,7 @@ namespace TaskManager.Bot.Model
             Buttons = buttons;
         }
 
-        public string[][] Buttons { get; }
+        public string[] Buttons { get; }
         public string Text { get; }
     }
 }

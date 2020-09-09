@@ -15,6 +15,6 @@ namespace TaskManager.Bot.Model
 
         public static TextResponse Create(string responseText) => new TextResponse(responseText);
 
-        public IResponse AsButton(string[][] keyboard) => new ButtonResponse(Text, keyboard);
+        public IResponse AsButton(string[] keyboard) => new ButtonResponse(Text, keyboard);
     }
 }

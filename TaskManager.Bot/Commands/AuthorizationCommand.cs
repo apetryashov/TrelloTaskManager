@@ -4,7 +4,7 @@ using TaskManager.Common;
 
 namespace TaskManager.Bot.Commands
 {
-    public class AuthorizationCommand : ICommand
+    public class AuthorizationCommand : ICommandWithPrefixValidation
     {
         private readonly IAuthorizationProvider authorizationProvider;
 
@@ -89,7 +89,6 @@ namespace TaskManager.Bot.Commands
 Чуть позже этот процесс будет еще проще :(
 ");
 
-        public bool IsPublicCommand { get; } = false;
         public string CommandTrigger { get; } = "/authorize";
     }
 }

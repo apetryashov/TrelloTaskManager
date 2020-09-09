@@ -1,9 +1,9 @@
 namespace TaskManager.Common.Tasks
 {
-    public enum TaskStatus
+    public enum TaskStatus1
     {
-        Inactive,
-        Active,
-        Resolved
+        ToDo,
+        Doing,
+        Done
     }
 }

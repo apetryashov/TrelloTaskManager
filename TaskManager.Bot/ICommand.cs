@@ -1,8 +1,9 @@
+using TaskManager.Bot.Model;
+
 namespace TaskManager.Bot
 {
-    public interface ICommand : IDefaultCommand
+    public interface ICommand
     {
-        bool IsPublicCommand { get; }
-        string CommandTrigger { get; }
+        IResponse StartCommand(ICommandInfo commandInfo);
     }
 }

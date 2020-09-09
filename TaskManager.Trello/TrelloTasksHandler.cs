@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manatee.Trello;
 using TaskManager.Common;
 using TaskManager.Common.Tasks;
-using TaskStatus = TaskManager.Common.Tasks.TaskStatus;
 
 namespace TaskManager.Trello
 {
@@ -13,7 +11,6 @@ namespace TaskManager.Trello
     {
         private readonly string appKey;
         private readonly ITrelloFactory factory;
-        private readonly Dictionary<string, BoardInfo> userTokenToBoardInfo = new Dictionary<string, BoardInfo>();
 
         public TrelloTasksHandler(AppKey appKey, ITrelloFactory trelloFactory)
         {
@@ -29,31 +26,33 @@ namespace TaskManager.Trello
                 UserToken = userToken
             });
             await task.Refresh();
+            await task.List.Refresh();
 
-            return ToTrelloTask(task, await GetTaskStatus(task, userToken)); //need set correct status
+            return ToTrelloTask(task); //need set correct status
         }
 
-        public async Task<MyTask[]> GetAllTasks(string userToken, TaskStatus status)
-            => await GetAllColumnTasks(userToken, status);
+        public async Task<MyTask[]> GetAllTasks(string userToken, string columnName)
+            => await GetAllColumnTasks(userToken, columnName);
 
-        public async Task ChangeTaskStatus(string userToken, MyTask task, TaskStatus toTaskStatus)
+        public async Task ChangeTaskColumn(string userToken, MyTask task, string targetColumnId)
         {
             var auth = new TrelloAuthorization
             {
                 AppKey = appKey,
                 UserToken = userToken
             };
-            var boardInfo = await GetBoardInfo(userToken);
+            var allBoardColumnsInfo = await GetAllBoardColumnsInfo(userToken);
+
             var card = new Card(task.Id, auth);
 
             await card.Refresh();
 
-            var list = toTaskStatus switch
-            {
-                TaskStatus.Active => new List(boardInfo.ActiveListId, auth),
-                TaskStatus.Inactive => new List(boardInfo.InactiveListId, auth),
-                TaskStatus.Resolved => new List(boardInfo.ResolvedListId, auth)
-            };
+            var boardColumnInfo = allBoardColumnsInfo.FirstOrDefault(x => x.Id == targetColumnId);
+
+            if (boardColumnInfo == default)
+                throw new Exception(); //TODO:!
+
+            var list = new List(boardColumnInfo.Id, auth);
             await list.Refresh();
             await card.Move(list.Cards.Count() + 1, list);
 
@@ -67,64 +66,39 @@ namespace TaskManager.Trello
                 AppKey = appKey,
                 UserToken = userToken
             };
-            var boardInfo = await GetBoardInfo(userToken);
-            var column = new List(boardInfo.InactiveListId, auth);
+            var boardColumnInfo = (await GetAllBoardColumnsInfo(userToken)).First();
 
+            var column = new List(boardColumnInfo.Id, auth);
             await column.Refresh();
             var card = await column.Cards.Add(myTask.Name, description: myTask.Description);
             await card.Refresh();
-            return ToTrelloTask(card, TaskStatus.Inactive);
+
+            return ToTrelloTask(card);
         }
 
-        private async Task<TaskStatus> GetTaskStatus(Card card, string userToken)
-        {
-            var boardInfo = await GetBoardInfo(userToken);
-            await card.Refresh();
-            var listId = card.List.Id;
-            if (listId == boardInfo.ActiveListId)
-                return TaskStatus.Active;
-            if (listId == boardInfo.InactiveListId)
-                return TaskStatus.Inactive;
-            if (listId == boardInfo.ResolvedListId)
-                return TaskStatus.Resolved;
-
-            throw new ArgumentException("Can not get trello card status");
-        }
-
-        private static async Task Move(Card card, int position, List list = null)
-        {
-            if (list != null && list != card.List) card.List = list;
-
-            card.Position = position;
-            await card.Refresh();
-        }
-
-        private async Task<MyTask[]> GetAllColumnTasks(string userToken, TaskStatus status)
+        private async Task<MyTask[]> GetAllColumnTasks(string userToken, string columnName)
         {
             var auth = new TrelloAuthorization
             {
                 AppKey = appKey,
                 UserToken = userToken
             };
-            var boardInfo = await GetBoardInfo(userToken);
+            var allBoardColumnsInfo = await GetAllBoardColumnsInfo(userToken);
+            var boardColumnInfo = allBoardColumnsInfo.FirstOrDefault(x => x.Name == columnName);
 
-            var boardList = status switch
-            {
-                TaskStatus.Inactive => factory.List(boardInfo.InactiveListId, auth),
-                TaskStatus.Active => factory.List(boardInfo.ActiveListId, auth),
-                TaskStatus.Resolved => factory.List(boardInfo.ResolvedListId, auth)
-            };
+            if (boardColumnInfo == default)
+                throw new Exception(); //TODO:!
+
+            var boardList = factory.List(boardColumnInfo.Id, auth);
 
             await boardList.Refresh();
 
-            return boardList.Cards.Select(card => ToTrelloTask(card, status)).ToArray();
+            return boardList.Cards.Select(ToTrelloTask).ToArray();
         }
 
-        private async Task<BoardInfo> GetBoardInfo(string userToken)
+        //TODO: сейчас доски ищутся в двух местах. Нужно вынести в одно  пользоваться там!
+        public async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(string userToken)
         {
-            if (userTokenToBoardInfo.TryGetValue(userToken, out var boardInfo))
-                return boardInfo;
-
             TrelloAuthorization.Default.AppKey =
                 appKey; // it will not work with multithreading. https://github.com/gregsdennis/Manatee.TrelloAuthorizationProvider/issues/313
             TrelloAuthorization.Default.UserToken = userToken;
@@ -134,34 +108,26 @@ namespace TaskManager.Trello
             var board = me.Boards.FirstOrDefault(x => x.Name == "TrelloTaskManager");
 
             if (board == null)
-                throw new Exception();
+                throw new Exception(); //TODO:
             await board.Lists.Refresh();
-            boardInfo = new BoardInfo
-            {
-                InactiveListId = board.Lists[0].Id,
-                ActiveListId = board.Lists[1].Id,
-                ResolvedListId = board.Lists[2].Id
-            };
 
-            userTokenToBoardInfo.Add(userToken, boardInfo);
-
-            return boardInfo;
+            return board.Lists
+                .Select(column => new BoardColumnInfo
+                {
+                    Id = column.Id,
+                    Name = column.Name
+                })
+                .ToArray();
         }
 
-        private MyTask ToTrelloTask(ICard card, TaskStatus status) => new MyTask
+        private static MyTask ToTrelloTask(ICard card) => new MyTask
         {
             Name = card.Name,
             Description = card.Description,
             Id = card.Id,
             Url = card.ShortUrl,
-            Status = status
+            Status = card.List.Name
         };
-
-        private class BoardInfo
-        {
-            public string InactiveListId { get; set; }
-            public string ActiveListId { get; set; }
-            public string ResolvedListId { get; set; }
-        }
     }
 }
+//170!

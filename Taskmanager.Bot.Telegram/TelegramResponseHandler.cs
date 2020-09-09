@@ -31,7 +31,13 @@ namespace TaskManager.Bot.Telegram
             }
         }
 
-        private static ReplyKeyboardMarkup AsReplyKeyboardMarkup(string[][] buttons) => buttons;
+        private static ReplyKeyboardMarkup AsReplyKeyboardMarkup(string[] buttons)
+        {
+            ReplyKeyboardMarkup markup = buttons;
+            markup.ResizeKeyboard = true;
+
+            return markup;
+        }
 
         private static InlineKeyboardMarkup AsInlineButtonResponse(
             IEnumerable<(string text, string callback)[]> buttons)

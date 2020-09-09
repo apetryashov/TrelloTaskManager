@@ -11,13 +11,8 @@ namespace TaskManager.Trello
         private const string SystemTableName = "TrelloTaskManager";
         private readonly string appKey;
         private readonly ITrelloFactory factory;
-
-        private readonly string[][] systemColumns =
-        {
-            new[] {"Нужно сделать", "To Do"},
-            new[] {"В процессе", "Doing"},
-            new[] {"Готово", "Done"}
-        };
+        //TODO: дать возможность создавать любую доску.
+        //Для этого можно ввести команду /refresh_board, которая переподтягивает доску
 
         public TrelloAuthorizationProvider(AppKey appKey, ITrelloFactory trelloFactory)
         {
@@ -43,19 +38,10 @@ namespace TaskManager.Trello
             var me = await GetMe(userToken);
             var boardCollection = me.Boards;
             await boardCollection.Refresh();
-            var board = boardCollection.FirstOrDefault(x => x.Name == SystemTableName) ??
-                        await me.Boards.Add(SystemTableName);
+            var board = boardCollection.FirstOrDefault(x => x.Name == SystemTableName);
 
-            var listCollection = board.Lists;
-
-            var isValidCollection =
-                listCollection.Count() == 3 &&
-                systemColumns[0].Contains(listCollection[0].Name) &&
-                systemColumns[1].Contains(listCollection[1].Name) &&
-                systemColumns[2].Contains(listCollection[2].Name);
-
-            if (!isValidCollection)
-                throw new ArgumentException("не удалось инициализировать доску"); //mb Result?
+            if (board == default)
+                await me.Boards.Add(SystemTableName);
         }
 
         public string GetAuthorizationUrl()

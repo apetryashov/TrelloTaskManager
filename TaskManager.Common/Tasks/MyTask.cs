@@ -9,7 +9,7 @@ namespace TaskManager.Common.Tasks
         public string Name { get; set; }
         [CanBeNull] public string Description { get; set; }
         public string Url { get; set; }
-        public TaskStatus Status { get; set; } = TaskStatus.Inactive;
+        public string Status { get; set; }
 
         public override string ToString()
         {
@@ -19,7 +19,7 @@ namespace TaskManager.Common.Tasks
             if (Description != null)
                 sb.AppendLine($"[Описание]: {Description}");
 
-            sb.AppendLine($"[Статус]: {Status.AsPrintableString()}");
+            sb.AppendLine($"[Статус]: {Status.ToString()}");
 
             sb.AppendLine($@"
 
