@@ -1,8 +1,8 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using TaskManager.Bot;
-using TaskManager.Bot.Authorization;
 using TaskManager.Bot.Commands;
+using TaskManager.Bot.Commands.Authorization;
 
 namespace TaskManager.Ioc.Modules
 {
@@ -10,7 +10,6 @@ namespace TaskManager.Ioc.Modules
     {
         public void Load(IServiceCollection services)
         {
-            services.AddScoped<ITextButtonMenuProvider, UserColumnsProvider>();
             services.AddScoped<ICommandWithPrefixValidation, GetTaskInfo>();
             services.AddScoped<ICommandWithPrefixValidation, AuthorizationCommand>();
             services.AddScoped<ICommandWithPrefixValidation, HelpCommand>();

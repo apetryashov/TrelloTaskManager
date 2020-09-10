@@ -13,6 +13,7 @@ namespace TaskManager.Bot.Commands
             this.message = message;
             CommandTrigger = commandTrigger;
         }
+
         public string CommandTrigger { get; }
 
         public IResponse StartCommand(ICommandInfo commandInfo) => TextResponse.Create(message);

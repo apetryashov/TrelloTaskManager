@@ -19,7 +19,7 @@ namespace TaskManager.Common.Tasks
             if (Description != null)
                 sb.AppendLine($"[Описание]: {Description}");
 
-            sb.AppendLine($"[Статус]: {Status.ToString()}");
+            sb.AppendLine($"[Статус]: {Status}");
 
             sb.AppendLine($@"
 

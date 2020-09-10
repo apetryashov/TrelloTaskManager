@@ -23,10 +23,9 @@ namespace TaskManager.Bot.Commands
             var targetColumnId = match.Groups["targetColumnId"].Value;
             var taskId = match.Groups["taskId"].Value;
 
-            var myTask = taskProvider.GetTaskById(author.UserToken, taskId).Result;
-            taskProvider.ChangeTaskColumn(author.UserToken, myTask, targetColumnId).Wait();
+            taskProvider.ChangeTaskColumn(author.UserToken, taskId, targetColumnId).Wait();
 
-            return TextResponse.Create($"Статус задачи изменен");
+            return TextResponse.Create("Статус задачи изменен");
         }
     }
 }

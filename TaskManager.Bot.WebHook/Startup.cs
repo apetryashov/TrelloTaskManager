@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TaskManager.Bot.Authorization;
 using TaskManager.Bot.WebHook.Services;
+using TaskManager.Common;
 using TaskManager.Ioc;
 using TaskManager.Ioc.Modules;
 

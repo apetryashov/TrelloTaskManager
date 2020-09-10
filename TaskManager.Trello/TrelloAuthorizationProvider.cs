@@ -11,8 +11,6 @@ namespace TaskManager.Trello
         private const string SystemTableName = "TrelloTaskManager";
         private readonly string appKey;
         private readonly ITrelloFactory factory;
-        //TODO: дать возможность создавать любую доску.
-        //Для этого можно ввести команду /refresh_board, которая переподтягивает доску
 
         public TrelloAuthorizationProvider(AppKey appKey, ITrelloFactory trelloFactory)
         {
@@ -24,7 +22,7 @@ namespace TaskManager.Trello
         {
             try
             {
-                await GetMe(userToken);
+                await factory.Me(appKey, userToken);
                 return true;
             }
             catch (Exception)
@@ -35,7 +33,7 @@ namespace TaskManager.Trello
 
         public async Task CheckOrInitializeWorkspace(string userToken)
         {
-            var me = await GetMe(userToken);
+            var me = await factory.Me(appKey, userToken);
             var boardCollection = me.Boards;
             await boardCollection.Refresh();
             var board = boardCollection.FirstOrDefault(x => x.Name == SystemTableName);
@@ -46,14 +44,5 @@ namespace TaskManager.Trello
 
         public string GetAuthorizationUrl()
             => $"https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=TrelloTaskManager&key={appKey}";
-
-        private async Task<IMe> GetMe(string userToken)
-        {
-            TrelloAuthorization.Default.AppKey =
-                appKey; // it will not work with multithreading. https://github.com/gregsdennis/Manatee.TrelloAuthorizationProvider/issues/313
-            TrelloAuthorization.Default.UserToken = userToken;
-
-            return await factory.Me();
-        }
     }
 }

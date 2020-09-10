@@ -3,11 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manatee.Trello;
 using TaskManager.Common;
+using TaskManager.Common.Domain;
 using TaskManager.Common.Tasks;
 
 namespace TaskManager.Trello
 {
-    public class TrelloTasksHandler : ITaskHandler // refactor this
+    public class TrelloTasksHandler : ITaskHandler, ITextButtonMenuProvider // refactor this
     {
         private readonly string appKey;
         private readonly ITrelloFactory factory;
@@ -34,7 +35,7 @@ namespace TaskManager.Trello
         public async Task<MyTask[]> GetAllTasks(string userToken, string columnName)
             => await GetAllColumnTasks(userToken, columnName);
 
-        public async Task ChangeTaskColumn(string userToken, MyTask task, string targetColumnId)
+        public async Task ChangeTaskColumn(string userToken, string taskId, string targetColumnId)
         {
             var auth = new TrelloAuthorization
             {
@@ -43,7 +44,7 @@ namespace TaskManager.Trello
             };
             var allBoardColumnsInfo = await GetAllBoardColumnsInfo(userToken);
 
-            var card = new Card(task.Id, auth);
+            var card = new Card(taskId, auth);
 
             await card.Refresh();
 
@@ -76,6 +77,31 @@ namespace TaskManager.Trello
             return ToTrelloTask(card);
         }
 
+        //TODO: сейчас доски ищутся в двух местах. Нужно вынести в одно  пользоваться там!
+        public async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(string userToken)
+        {
+            var me = await factory.Me(appKey, userToken);
+            await me.Refresh();
+            var board = me.Boards.FirstOrDefault(x => x.Name == "TrelloTaskManager");
+
+            if (board == null)
+                throw new Exception(); //TODO:
+            await board.Lists.Refresh();
+
+            return board.Lists
+                .Select(column => new BoardColumnInfo
+                {
+                    Id = column.Id,
+                    Name = column.Name
+                })
+                .ToArray();
+        }
+
+        public string[] GetButtons(Author author) => GetAllBoardColumnsInfo(author.UserToken)
+            .Result
+            .Select(info => info.Name)
+            .ToArray();
+
         private async Task<MyTask[]> GetAllColumnTasks(string userToken, string columnName)
         {
             var auth = new TrelloAuthorization
@@ -94,30 +120,6 @@ namespace TaskManager.Trello
             await boardList.Refresh();
 
             return boardList.Cards.Select(ToTrelloTask).ToArray();
-        }
-
-        //TODO: сейчас доски ищутся в двух местах. Нужно вынести в одно  пользоваться там!
-        public async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(string userToken)
-        {
-            TrelloAuthorization.Default.AppKey =
-                appKey; // it will not work with multithreading. https://github.com/gregsdennis/Manatee.TrelloAuthorizationProvider/issues/313
-            TrelloAuthorization.Default.UserToken = userToken;
-
-            var me = await factory.Me();
-            await me.Refresh();
-            var board = me.Boards.FirstOrDefault(x => x.Name == "TrelloTaskManager");
-
-            if (board == null)
-                throw new Exception(); //TODO:
-            await board.Lists.Refresh();
-
-            return board.Lists
-                .Select(column => new BoardColumnInfo
-                {
-                    Id = column.Id,
-                    Name = column.Name
-                })
-                .ToArray();
         }
 
         private static MyTask ToTrelloTask(ICard card) => new MyTask

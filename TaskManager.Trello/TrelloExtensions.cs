@@ -12,5 +12,12 @@ namespace TaskManager.Trello
             card.Position = position;
             await card.Refresh();
         }
+
+        public static Task<IMe> Me(this ITrelloFactory factory, string appKey, string userToken)
+            => factory.Me(new TrelloAuthorization
+            {
+                AppKey = appKey,
+                UserToken = userToken
+            });
     }
 }

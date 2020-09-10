@@ -1,9 +1,8 @@
 using System.Linq;
-using TaskManager.Bot.Authorization;
-using TaskManager.Bot.Commands;
+using TaskManager.Bot.Commands.Authorization;
 using TaskManager.Bot.Model;
-using TaskManager.Bot.Model.Domain;
-using TaskManager.Common.Helpers;
+using TaskManager.Common;
+using TaskManager.Common.Domain;
 
 namespace TaskManager.Bot
 {

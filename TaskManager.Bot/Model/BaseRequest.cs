@@ -1,4 +1,4 @@
-using TaskManager.Bot.Model.Domain;
+using TaskManager.Common.Domain;
 
 namespace TaskManager.Bot.Model
 {

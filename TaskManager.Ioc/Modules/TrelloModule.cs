@@ -18,6 +18,7 @@ namespace TaskManager.Ioc.Modules
             services.AddScoped<ITrelloFactory, TrelloFactory>();
             services.AddScoped<ITaskHandler, TrelloTasksHandler>();
             services.AddScoped<IAuthorizationProvider, TrelloAuthorizationProvider>();
+            services.AddScoped<ITextButtonMenuProvider, TrelloTasksHandler>();
         }
     }
 }

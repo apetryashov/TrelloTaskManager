@@ -1,15 +1,15 @@
 using System.Linq;
-using TaskManager.Bot.Authorization;
 using TaskManager.Bot.Model;
+using TaskManager.Common;
 using TaskManager.Common.Tasks;
 
 namespace TaskManager.Bot.Commands
 {
     public class GetTaskListOrAddTaskCommand : ICommand
     {
-        private readonly ITextButtonMenuProvider textButtonMenuProvider;
-        private readonly ITaskHandler taskProvider;
         private readonly AddTask addTaskCommand;
+        private readonly ITaskHandler taskProvider;
+        private readonly ITextButtonMenuProvider textButtonMenuProvider;
 
         public GetTaskListOrAddTaskCommand(
             ITextButtonMenuProvider textButtonMenuProvider,

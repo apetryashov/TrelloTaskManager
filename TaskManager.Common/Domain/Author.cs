@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace TaskManager.Bot.Model.Domain
+namespace TaskManager.Common.Domain
 {
     public class Author
     {

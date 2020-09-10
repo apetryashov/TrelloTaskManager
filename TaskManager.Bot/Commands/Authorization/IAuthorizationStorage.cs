@@ -1,6 +1,6 @@
-using TaskManager.Bot.Model.Domain;
+using TaskManager.Common.Domain;
 
-namespace TaskManager.Bot.Authorization
+namespace TaskManager.Bot.Commands.Authorization
 {
     public interface IAuthorizationStorage
     {

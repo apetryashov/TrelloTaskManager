@@ -1,9 +1,10 @@
-using TaskManager.Bot.Authorization;
 using TaskManager.Bot.Model;
 using TaskManager.Common;
 
-namespace TaskManager.Bot.Commands
+namespace TaskManager.Bot.Commands.Authorization
 {
+    //TODO: надо добавить reauthorize команду, которая удаляет из монги данные
+
     public class AuthorizationCommand : ICommandWithPrefixValidation
     {
         private readonly IAuthorizationProvider authorizationProvider;
@@ -39,6 +40,8 @@ namespace TaskManager.Bot.Commands
                 _ => ContinueAuthorization(commandInfo)
             };
         }
+
+        public string CommandTrigger { get; } = "/authorize";
 
         private IResponse StartAuthorization(bool isStartCommand)
         {
@@ -88,7 +91,5 @@ namespace TaskManager.Bot.Commands
 
 Чуть позже этот процесс будет еще проще :(
 ");
-
-        public string CommandTrigger { get; } = "/authorize";
     }
 }

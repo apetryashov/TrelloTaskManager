@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using JetBrains.Annotations;
 
-namespace TaskManager.Bot.Authorization
+namespace TaskManager.Common
 {
     [PublicAPI]
     public class MongoConnectionProperties
