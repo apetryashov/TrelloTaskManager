@@ -1,27 +1,29 @@
 using System.Linq;
 using TaskManager.Bot.Commands.Authorization;
-using TaskManager.Bot.Model;
 using TaskManager.Common;
-using TaskManager.Common.Domain;
+using TaskManager.Trello;
+using TelegramBot.Core.Commands;
+using TelegramBot.Core.Domain;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot
 {
     public class RequestHandler : IRequestHandler
     {
         private readonly AuthorizationCommand authorizationCommand;
-        private readonly IAuthorizationStorage authorizationStorage;
+        private readonly IUserItemsStorage<TrelloApiToken> userTokenStorage;
         private readonly ICommandWithPrefixValidation[] commandsWithPrefixValidation;
         private readonly ICommand defaultCommand;
         private readonly ITextButtonMenuProvider textButtonMenuProvider;
 
         public RequestHandler(
-            IAuthorizationStorage authorizationStorage,
+            IUserItemsStorage<TrelloApiToken> userTokenStorage,
             AuthorizationCommand authorizationCommand,
             ICommandWithPrefixValidation[] commandsWithPrefixValidation,
             ICommand defaultCommand,
             ITextButtonMenuProvider textButtonMenuProvider)
         {
-            this.authorizationStorage = authorizationStorage;
+            this.userTokenStorage = userTokenStorage;
             this.commandsWithPrefixValidation = commandsWithPrefixValidation;
             this.authorizationCommand = authorizationCommand;
             this.defaultCommand = defaultCommand;
@@ -33,10 +35,6 @@ namespace TaskManager.Bot
             var author = request.Author;
 
             var commandText = request.Command;
-
-            if (authorizationStorage.TryGetUserToken(author, out var token))
-                author.UserToken = token;
-
             var response = Execute(author, commandText);
 
             if (response is TextResponse textResponse)
@@ -51,9 +49,9 @@ namespace TaskManager.Bot
         {
             var commandInfo = new CommandInfo(author, commandText);
 
-            var command = author.UserToken == null
-                ? authorizationCommand
-                : GetCommandByPrefix(commandText);
+            var command = userTokenStorage.Has(author.TelegramId)
+                ? GetCommandByPrefix(commandText)
+                : authorizationCommand;
 
             return command.StartCommand(commandInfo);
         }
@@ -65,6 +63,6 @@ namespace TaskManager.Bot
 
         private string[] GetMenu(Author author) =>
             textButtonMenuProvider
-                .GetButtons(author);
+                .GetButtons(author.TelegramId);
     }
 }

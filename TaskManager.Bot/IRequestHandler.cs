@@ -1,4 +1,4 @@
-using TaskManager.Bot.Model;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot
 {

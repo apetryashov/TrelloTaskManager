@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot.Telegram", "TaskManager.Bot.Telegram\TaskManager.Bot.Telegram.csproj", "{7AB26A4A-6890-453C-8949-2B55FE58AA4B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Trello", "TaskManager.Trello\TaskManager.Trello.csproj", "{2E456275-FD9B-4534-AF1C-8412A830AF6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Common", "TaskManager.Common\TaskManager.Common.csproj", "{542B5918-5FBC-44DA-94F2-53B28901F44A}"
@@ -12,16 +10,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot", "TaskMana
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Bot.WebHook", "TaskManager.Bot.WebHook\TaskManager.Bot.WebHook.csproj", "{09C2D8A5-DEE0-4929-B2FB-F9403645E2BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBot.Core", "TelegramBot.Core\TelegramBot.Core.csproj", "{39B13E2C-5C8C-452D-9353-5633183F72F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Common.Tests", "TaskManager.Common.Tests\TaskManager.Common.Tests.csproj", "{76896F97-915E-481F-BE75-A39F6EA11968}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7AB26A4A-6890-453C-8949-2B55FE58AA4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AB26A4A-6890-453C-8949-2B55FE58AA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AB26A4A-6890-453C-8949-2B55FE58AA4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AB26A4A-6890-453C-8949-2B55FE58AA4B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E456275-FD9B-4534-AF1C-8412A830AF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E456275-FD9B-4534-AF1C-8412A830AF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E456275-FD9B-4534-AF1C-8412A830AF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -42,5 +40,13 @@ Global
 		{09C2D8A5-DEE0-4929-B2FB-F9403645E2BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C2D8A5-DEE0-4929-B2FB-F9403645E2BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C2D8A5-DEE0-4929-B2FB-F9403645E2BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39B13E2C-5C8C-452D-9353-5633183F72F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39B13E2C-5C8C-452D-9353-5633183F72F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39B13E2C-5C8C-452D-9353-5633183F72F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39B13E2C-5C8C-452D-9353-5633183F72F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76896F97-915E-481F-BE75-A39F6EA11968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76896F97-915E-481F-BE75-A39F6EA11968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76896F97-915E-481F-BE75-A39F6EA11968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76896F97-915E-481F-BE75-A39F6EA11968}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

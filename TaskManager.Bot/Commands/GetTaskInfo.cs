@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using TaskManager.Bot.Model;
 using TaskManager.Common.Tasks;
+using TelegramBot.Core.Commands;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot.Commands
 {
@@ -16,9 +17,9 @@ namespace TaskManager.Bot.Commands
         public IResponse StartCommand(ICommandInfo commandInfo)
         {
             var taskId = commandInfo.Command.Substring(CommandTrigger.Length + 1);
-            var token = commandInfo.Author.UserToken;
-            var task = taskProvider.GetTaskById(commandInfo.Author.UserToken, taskId).Result;
-            var allBoards = taskProvider.GetAllBoardColumnsInfo(token).Result;
+            var id = commandInfo.Author.TelegramId;
+            var task = taskProvider.GetTaskById(id, taskId).Result;
+            var allBoards = taskProvider.GetAllBoardColumnsInfo(id).Result;
 
             return InlineButtonResponse.CreateWithHorizontalButtons(
                 task.ToString(),

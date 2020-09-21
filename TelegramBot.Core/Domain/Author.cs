@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace TaskManager.Common.Domain
+namespace TelegramBot.Core.Domain
 {
     public class Author
     {
@@ -12,11 +12,9 @@ namespace TaskManager.Common.Domain
             UserName = username;
         }
 
-        public long TelegramId { get; }
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string UserName { get; }
-
-        [CanBeNull] public string UserToken { get; set; }
+        public long TelegramId { get; set;}
+        public string FirstName { get; set;}
+        public string LastName { get; set;}
+        public string UserName { get; set;}
     }
 }

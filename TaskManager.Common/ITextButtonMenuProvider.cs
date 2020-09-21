@@ -1,9 +1,9 @@
-using TaskManager.Common.Domain;
+using TelegramBot.Core.Domain;
 
 namespace TaskManager.Common
 {
     public interface ITextButtonMenuProvider
     {
-        public string[] GetButtons(Author author);
+        public string[] GetButtons(long userId);
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace TaskManager.Bot.Model
+namespace TelegramBot.Core.Model
 {
     public class InlineButtonResponse : IResponse
     {

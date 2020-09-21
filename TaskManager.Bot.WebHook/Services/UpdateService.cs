@@ -1,22 +1,22 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using TaskManager.Bot.Model;
-using TaskManager.Bot.Telegram;
-using TaskManager.Common.Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using TelegramBot.Core;
+using TelegramBot.Core.Domain;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot.WebHook.Services
 {
     public class UpdateService : IUpdateService
     {
-        private readonly TelegramBotClient client;
+        private readonly ITelegramBotClient client;
         private readonly ILogger<UpdateService> logger;
         private readonly IRequestHandler requestHandler;
 
-        public UpdateService(ILogger<UpdateService> logger, IRequestHandler requestHandler, TelegramBotClient client)
+        public UpdateService(ILogger<UpdateService> logger, IRequestHandler requestHandler, ITelegramBotClient client)
         {
             this.logger = logger;
             this.requestHandler = requestHandler;

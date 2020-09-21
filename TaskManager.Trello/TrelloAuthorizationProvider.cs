@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manatee.Trello;
 using TaskManager.Common;
+using TelegramBot.Core.Domain;
 
 namespace TaskManager.Trello
 {
@@ -10,11 +11,16 @@ namespace TaskManager.Trello
     {
         private const string SystemTableName = "TrelloTaskManager";
         private readonly string appKey;
+        private readonly string returnUrl;
         private readonly ITrelloFactory factory;
 
-        public TrelloAuthorizationProvider(AppKey appKey, ITrelloFactory trelloFactory)
+        public TrelloAuthorizationProvider(
+            AppKey appKey, 
+            ReturnUrl returnUrl,
+            ITrelloFactory trelloFactory)
         {
             this.appKey = appKey.Key;
+            this.returnUrl = returnUrl.Url;
             factory = trelloFactory;
         }
 
@@ -42,7 +48,13 @@ namespace TaskManager.Trello
                 await me.Boards.Add(SystemTableName);
         }
 
-        public string GetAuthorizationUrl()
-            => $"https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=TrelloTaskManager&key={appKey}";
+        public Uri GetAuthorizationUrl(Author author)
+            => new Uri($"https://trello.com/1/authorize" +
+                       $"?expiration=never" +
+                       $"&scope=read,write,account" +
+                       $"&response_type=token" +
+                       $"&name=TrelloTaskManager" +
+                       $"&key={appKey}" +
+                       $"&return_url={returnUrl}/auth?telegram_id={author.TelegramId}");
     }
 }

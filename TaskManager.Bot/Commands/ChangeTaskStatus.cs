@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
-using TaskManager.Bot.Model;
 using TaskManager.Common.Tasks;
+using TelegramBot.Core.Commands;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot.Commands
 {
@@ -23,7 +24,7 @@ namespace TaskManager.Bot.Commands
             var targetColumnId = match.Groups["targetColumnId"].Value;
             var taskId = match.Groups["taskId"].Value;
 
-            taskProvider.ChangeTaskColumn(author.UserToken, taskId, targetColumnId).Wait();
+            taskProvider.ChangeTaskColumn(author.TelegramId, taskId, targetColumnId).Wait();
 
             return TextResponse.Create("Статус задачи изменен");
         }

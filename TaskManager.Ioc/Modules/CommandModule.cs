@@ -1,8 +1,8 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using TaskManager.Bot;
 using TaskManager.Bot.Commands;
 using TaskManager.Bot.Commands.Authorization;
+using TelegramBot.Core.Commands;
 
 namespace TaskManager.Ioc.Modules
 {
@@ -10,6 +10,7 @@ namespace TaskManager.Ioc.Modules
     {
         public void Load(IServiceCollection services)
         {
+            services.AddScoped<AuthorizationResponseCommand>();
             services.AddScoped<ICommandWithPrefixValidation, GetTaskInfo>();
             services.AddScoped<ICommandWithPrefixValidation, AuthorizationCommand>();
             services.AddScoped<ICommandWithPrefixValidation, HelpCommand>();

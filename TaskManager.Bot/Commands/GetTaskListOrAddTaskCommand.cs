@@ -1,7 +1,8 @@
 using System.Linq;
-using TaskManager.Bot.Model;
 using TaskManager.Common;
 using TaskManager.Common.Tasks;
+using TelegramBot.Core.Commands;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot.Commands
 {
@@ -23,12 +24,12 @@ namespace TaskManager.Bot.Commands
 
         public IResponse StartCommand(ICommandInfo commandInfo)
         {
-            var columns = textButtonMenuProvider.GetButtons(commandInfo.Author);
+            var columns = textButtonMenuProvider.GetButtons(commandInfo.Author.TelegramId);
             var command = commandInfo.Command;
             if (!columns.Contains(command))
                 return addTaskCommand.StartCommand(commandInfo);
 
-            var tasks = taskProvider.GetAllTasks(commandInfo.Author.UserToken, command).Result;
+            var tasks = taskProvider.GetAllTasks(commandInfo.Author.TelegramId, command).Result;
             var buttons = tasks.Select(x => (x.Name, $"/task_{x.Id}")).ToArray();
             return InlineButtonResponse.CreateWithVerticalButtons(command, buttons);
         }

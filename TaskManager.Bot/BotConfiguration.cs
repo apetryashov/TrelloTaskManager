@@ -4,6 +4,7 @@ namespace TaskManager.Bot
     {
         public string BotToken { get; set; }
         public string AccessToken { get; set; }
+        public string ReturnUrl { get; set; }
 
         public string Socks5Host { get; set; }
 

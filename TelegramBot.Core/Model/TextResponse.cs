@@ -1,6 +1,6 @@
 using System;
 
-namespace TaskManager.Bot.Model
+namespace TelegramBot.Core.Model
 {
     public class TextResponse : IResponse
     {

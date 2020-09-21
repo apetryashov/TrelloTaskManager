@@ -1,6 +1,7 @@
 using System;
-using TaskManager.Bot.Model;
 using TaskManager.Common.Tasks;
+using TelegramBot.Core.Commands;
+using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot.Commands
 {
@@ -14,7 +15,7 @@ namespace TaskManager.Bot.Commands
         public IResponse StartCommand(ICommandInfo commandInfo)
         {
             var task = ExtractTaskInfo(commandInfo);
-            var fullTask = taskProvider.AddNewTask(commandInfo.Author.UserToken, task).Result;
+            var fullTask = taskProvider.AddNewTask(commandInfo.Author.TelegramId, task).Result;
 
             return TextResponse.Create(@$"
 Задача успешно добавлена!

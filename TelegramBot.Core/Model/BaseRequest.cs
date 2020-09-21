@@ -1,6 +1,6 @@
-using TaskManager.Common.Domain;
+using TelegramBot.Core.Domain;
 
-namespace TaskManager.Bot.Model
+namespace TelegramBot.Core.Model
 {
     public class BaseRequest : IRequest
     {

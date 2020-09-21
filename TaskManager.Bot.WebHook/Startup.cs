@@ -22,13 +22,16 @@ namespace TaskManager.Bot.WebHook
             var mongoConnectionProperties =
                 Configuration.GetSection("MongoConfiguration").Get<MongoConnectionProperties>();
 
+            services.AddRazorPages();
+
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddScoped<IRequestHandler, RequestHandler>();
 
             services
                 .AddModule(new TelegramBotModule(botConfiguration))
-                .AddModule(new TrelloModule(botConfiguration.AccessToken))
+                .AddModule(new TrelloModule(botConfiguration.AccessToken, botConfiguration.ReturnUrl))
                 .AddModule<CommandModule>()
+                .AddModule<CommonModule>()
                 .AddModule(new MongoDbAuthorizationStorageModule(mongoConnectionProperties))
                 .AddControllers()
                 .AddNewtonsoftJson();
@@ -39,10 +42,16 @@ namespace TaskManager.Bot.WebHook
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

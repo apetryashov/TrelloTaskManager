@@ -1,0 +1,22 @@
+﻿@page
+
+
+<script>
+
+if (window.location.hash)
+{
+    const urlParams = new URLSearchParams(window.location.search);
+    const telegram_id = urlParams.get('telegram_id');
+    const token = window.location.hash.split('=')[1];
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            window.close();
+        }
+    }
+    const url='/api/auth?token=' + token + '&telegram_id=' + telegram_id;
+    xhr.open("POST", url);
+    xhr.send();
+}
+
+</script>

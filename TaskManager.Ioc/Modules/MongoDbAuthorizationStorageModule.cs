@@ -19,7 +19,6 @@ namespace TaskManager.Ioc.Modules
                 .GetDatabase(url.DatabaseName);
 
             services.AddSingleton(mongoDb);
-            services.AddSingleton<IAuthorizationStorage, MongoDbAuthorizationStorage>();
         }
     }
 }

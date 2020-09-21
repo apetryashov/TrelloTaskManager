@@ -19,7 +19,7 @@ namespace TaskManager.Ioc.Modules
                     config.BotToken,
                     new HttpToSocks5Proxy(config.Socks5Host, config.Socks5Port));
 
-            serviceCollection.AddSingleton(client);
+            serviceCollection.AddSingleton<ITelegramBotClient>(client);
         }
     }
 }

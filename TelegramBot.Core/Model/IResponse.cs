@@ -1,4 +1,4 @@
-namespace TaskManager.Bot.Model
+namespace TelegramBot.Core.Model
 {
     public interface IResponse
     {

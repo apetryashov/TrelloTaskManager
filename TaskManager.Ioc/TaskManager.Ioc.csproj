@@ -1,18 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />
-      <PackageReference Include="Ninject" Version="3.3.4" />
+        <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />
+        <PackageReference Include="Ninject" Version="3.3.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Taskmanager.Bot.Telegram\Taskmanager.Bot.Telegram.csproj" />
-      <ProjectReference Include="..\TaskManager.Bot.Telegram\TaskManager.Bot.Telegram.csproj" />
+      <ProjectReference Include="..\TaskManager.Bot\TaskManager.Bot.csproj" />
     </ItemGroup>
 
 </Project>

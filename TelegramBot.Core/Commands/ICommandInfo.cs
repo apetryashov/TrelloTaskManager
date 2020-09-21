@@ -1,6 +1,6 @@
-using TaskManager.Common.Domain;
+using TelegramBot.Core.Domain;
 
-namespace TaskManager.Bot
+namespace TelegramBot.Core.Commands
 {
     public interface ICommandInfo
     {

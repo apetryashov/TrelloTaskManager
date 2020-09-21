@@ -1,6 +1,6 @@
-using TaskManager.Bot.Model;
+using TelegramBot.Core.Model;
 
-namespace TaskManager.Bot
+namespace TelegramBot.Core.Commands
 {
     public interface ICommand
     {

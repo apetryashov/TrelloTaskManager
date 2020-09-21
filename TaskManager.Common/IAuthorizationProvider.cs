@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using TelegramBot.Core.Domain;
 
 namespace TaskManager.Common
 {
@@ -6,6 +8,6 @@ namespace TaskManager.Common
     {
         Task<bool> IsValidAuthorizationToken(string userToken);
         Task CheckOrInitializeWorkspace(string userToken);
-        string GetAuthorizationUrl();
+        Uri GetAuthorizationUrl(Author author);
     }
 }

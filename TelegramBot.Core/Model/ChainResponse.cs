@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TaskManager.Bot.Model
+namespace TelegramBot.Core.Model
 {
     public class ChainResponse : IResponse
     {
