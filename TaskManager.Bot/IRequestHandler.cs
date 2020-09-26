@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using TelegramBot.Core.Model;
 
 namespace TaskManager.Bot
 {
     public interface IRequestHandler
     {
-        IResponse GetResponse(IRequest request);
+        Task<IResponse> GetResponse(IRequest request);
     }
 }

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using TaskManager.Bot.Commands.Authorization;
 using TaskManager.Common;
 
 namespace TaskManager.Ioc.Modules

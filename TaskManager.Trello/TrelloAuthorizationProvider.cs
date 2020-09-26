@@ -11,11 +11,11 @@ namespace TaskManager.Trello
     {
         private const string SystemTableName = "TrelloTaskManager";
         private readonly string appKey;
-        private readonly string returnUrl;
         private readonly ITrelloFactory factory;
+        private readonly string returnUrl;
 
         public TrelloAuthorizationProvider(
-            AppKey appKey, 
+            AppKey appKey,
             ReturnUrl returnUrl,
             ITrelloFactory trelloFactory)
         {
@@ -49,11 +49,11 @@ namespace TaskManager.Trello
         }
 
         public Uri GetAuthorizationUrl(Author author)
-            => new Uri($"https://trello.com/1/authorize" +
-                       $"?expiration=never" +
-                       $"&scope=read,write,account" +
-                       $"&response_type=token" +
-                       $"&name=TrelloTaskManager" +
+            => new Uri("https://trello.com/1/authorize" +
+                       "?expiration=never" +
+                       "&scope=read,write,account" +
+                       "&response_type=token" +
+                       "&name=TrelloTaskManager" +
                        $"&key={appKey}" +
                        $"&return_url={returnUrl}/auth?telegram_id={author.TelegramId}");
     }

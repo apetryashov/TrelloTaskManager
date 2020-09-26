@@ -9,8 +9,8 @@ namespace TaskManager.Bot.WebHook.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly ITelegramBotClient client;
         private readonly AuthorizationResponseCommand authorizationResponseCommand;
+        private readonly ITelegramBotClient client;
 
         public AuthController(ITelegramBotClient client, AuthorizationResponseCommand authorizationResponseCommand)
         {
@@ -25,7 +25,7 @@ namespace TaskManager.Bot.WebHook.Controllers
             [FromQuery] string token
         )
         {
-            var response = authorizationResponseCommand.StartCommand(telegramId, token);
+            var response = await authorizationResponseCommand.StartCommand(telegramId, token);
             await client.SendResponse(telegramId, response);
 
             return Ok();

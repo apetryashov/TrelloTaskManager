@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using TaskManager.Bot.Commands.Authorization;
 using TaskManager.Common;
 using TaskManager.Trello;
@@ -11,10 +12,10 @@ namespace TaskManager.Bot
     public class RequestHandler : IRequestHandler
     {
         private readonly AuthorizationCommand authorizationCommand;
-        private readonly IUserItemsStorage<TrelloApiToken> userTokenStorage;
         private readonly ICommandWithPrefixValidation[] commandsWithPrefixValidation;
         private readonly ICommand defaultCommand;
         private readonly ITextButtonMenuProvider textButtonMenuProvider;
+        private readonly IUserItemsStorage<TrelloApiToken> userTokenStorage;
 
         public RequestHandler(
             IUserItemsStorage<TrelloApiToken> userTokenStorage,
@@ -30,22 +31,22 @@ namespace TaskManager.Bot
             this.textButtonMenuProvider = textButtonMenuProvider;
         }
 
-        public IResponse GetResponse(IRequest request)
+        public async Task<IResponse> GetResponse(IRequest request)
         {
             var author = request.Author;
 
             var commandText = request.Command;
-            var response = Execute(author, commandText);
+            var response = await Execute(author, commandText);
 
             if (response is TextResponse textResponse)
-                response = textResponse.AsButton(GetMenu(author));
+                response = textResponse.AsButton(await GetMenu(author));
 
             // throw if not TextResponse?
 
             return response;
         }
 
-        private IResponse Execute(Author author, string commandText)
+        private Task<IResponse> Execute(Author author, string commandText)
         {
             var commandInfo = new CommandInfo(author, commandText);
 
@@ -61,7 +62,7 @@ namespace TaskManager.Bot
                 .FirstOrDefault(c => c.IsValidCommand(textCommand))
             ?? defaultCommand;
 
-        private string[] GetMenu(Author author) =>
+        private Task<string[]> GetMenu(Author author) =>
             textButtonMenuProvider
                 .GetButtons(author.TelegramId);
     }

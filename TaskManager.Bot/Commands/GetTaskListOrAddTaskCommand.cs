@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using TaskManager.Common;
 using TaskManager.Common.Tasks;
 using TelegramBot.Core.Commands;
@@ -22,14 +23,14 @@ namespace TaskManager.Bot.Commands
             this.addTaskCommand = addTaskCommand;
         }
 
-        public IResponse StartCommand(ICommandInfo commandInfo)
+        public async Task<IResponse> StartCommand(ICommandInfo commandInfo)
         {
-            var columns = textButtonMenuProvider.GetButtons(commandInfo.Author.TelegramId);
+            var columns = await textButtonMenuProvider.GetButtons(commandInfo.Author.TelegramId);
             var command = commandInfo.Command;
             if (!columns.Contains(command))
-                return addTaskCommand.StartCommand(commandInfo);
+                return await addTaskCommand.StartCommand(commandInfo);
 
-            var tasks = taskProvider.GetAllTasks(commandInfo.Author.TelegramId, command).Result;
+            var tasks = await taskProvider.GetAllTasks(commandInfo.Author.TelegramId, command);
             var buttons = tasks.Select(x => (x.Name, $"/task_{x.Id}")).ToArray();
             return InlineButtonResponse.CreateWithVerticalButtons(command, buttons);
         }

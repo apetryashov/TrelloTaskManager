@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TaskManager.Common;
 using TaskManager.Trello;
 using TelegramBot.Core.Model;
@@ -17,17 +18,19 @@ namespace TaskManager.Bot.Commands.Authorization
             this.userTokenStorage = userTokenStorage;
         }
 
-        public IResponse StartCommand(long telegramId, string token)
+        public async Task<IResponse> StartCommand(long telegramId, string token)
         {
             var errorResponse = ChainResponse.Create()
                 .AddResponse(TextResponse.Create("Что-то пошло не так, попробуйте еще раз"));
 
-            if (!authorizationProvider.IsValidAuthorizationToken(token).Result)
+            var isValidToken = await authorizationProvider.IsValidAuthorizationToken(token);
+
+            if (!isValidToken)
                 return errorResponse;
 
             try
             {
-                authorizationProvider.CheckOrInitializeWorkspace(token).GetAwaiter().GetResult();
+                await authorizationProvider.CheckOrInitializeWorkspace(token);
                 userTokenStorage.Set(telegramId, new TrelloApiToken
                 {
                     Token = token

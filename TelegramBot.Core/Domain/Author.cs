@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-
 namespace TelegramBot.Core.Domain
 {
     public class Author
@@ -12,9 +10,9 @@ namespace TelegramBot.Core.Domain
             UserName = username;
         }
 
-        public long TelegramId { get; set;}
-        public string FirstName { get; set;}
-        public string LastName { get; set;}
-        public string UserName { get; set;}
+        public long TelegramId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string UserName { get; set; }
     }
 }

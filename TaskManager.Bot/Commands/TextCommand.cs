@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TelegramBot.Core.Commands;
 using TelegramBot.Core.Model;
 
@@ -17,6 +18,8 @@ namespace TaskManager.Bot.Commands
 
         public string CommandTrigger { get; }
 
-        public IResponse StartCommand(ICommandInfo commandInfo) => TextResponse.Create(message);
+        public Task<IResponse> StartCommand(ICommandInfo commandInfo) => TextResponse
+            .Create(message)
+            .RunAsTask();
     }
 }

@@ -4,6 +4,8 @@ namespace TelegramBot.Core.Model
 {
     public class LinkResponse : IResponse
     {
+        public string LinkMessage;
+
         private LinkResponse(string responseText, string linkMessage, Uri link)
         {
             if (responseText.Length == 0)
@@ -14,7 +16,6 @@ namespace TelegramBot.Core.Model
         }
 
         public string Text { get; }
-        public string LinkMessage;
         public Uri Link { get; }
 
         public static LinkResponse Create(string responseText, string linkMessage, Uri uri)

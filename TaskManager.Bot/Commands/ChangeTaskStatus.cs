@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using TaskManager.Common.Tasks;
 using TelegramBot.Core.Commands;
 using TelegramBot.Core.Model;
@@ -16,7 +17,7 @@ namespace TaskManager.Bot.Commands
 
         public string CommandTrigger => "/move";
 
-        public IResponse StartCommand(ICommandInfo commandInfo)
+        public async Task<IResponse> StartCommand(ICommandInfo commandInfo)
         {
             var command = commandInfo.Command;
             var author = commandInfo.Author;
@@ -24,7 +25,7 @@ namespace TaskManager.Bot.Commands
             var targetColumnId = match.Groups["targetColumnId"].Value;
             var taskId = match.Groups["taskId"].Value;
 
-            taskProvider.ChangeTaskColumn(author.TelegramId, taskId, targetColumnId).Wait();
+            await taskProvider.ChangeTaskColumn(author.TelegramId, taskId, targetColumnId);
 
             return TextResponse.Create("Статус задачи изменен");
         }

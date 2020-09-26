@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TaskManager.Common.Tasks;
 using TelegramBot.Core.Commands;
 using TelegramBot.Core.Model;
@@ -14,12 +15,12 @@ namespace TaskManager.Bot.Commands
 
         public string CommandTrigger => "/task";
 
-        public IResponse StartCommand(ICommandInfo commandInfo)
+        public async Task<IResponse> StartCommand(ICommandInfo commandInfo)
         {
             var taskId = commandInfo.Command.Substring(CommandTrigger.Length + 1);
             var id = commandInfo.Author.TelegramId;
-            var task = taskProvider.GetTaskById(id, taskId).Result;
-            var allBoards = taskProvider.GetAllBoardColumnsInfo(id).Result;
+            var task = await taskProvider.GetTaskById(id, taskId);
+            var allBoards = await taskProvider.GetAllBoardColumnsInfo(id);
 
             return InlineButtonResponse.CreateWithHorizontalButtons(
                 task.ToString(),

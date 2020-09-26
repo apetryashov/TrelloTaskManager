@@ -64,8 +64,8 @@ namespace TaskManager.Bot.WebHook.Services
 
         private async Task HandleIncomingRequest(IRequest request)
         {
-            var response = requestHandler.GetResponse(request);
-            await TelegramResponseHandler.SendResponse(client, request.Author.TelegramId, response);
+            var response = await requestHandler.GetResponse(request);
+            await client.SendResponse(request.Author.TelegramId, response);
         }
 
         private static IRequest AnalyzeIncomingMessage(Message message)

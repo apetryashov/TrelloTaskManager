@@ -77,6 +77,10 @@ namespace TaskManager.Trello
             return await GetAllBoardColumnsInfo(trelloAuthorization.UserToken);
         }
 
+        public async Task<string[]> GetButtons(long userId) => (await GetAllBoardColumnsInfo(userId))
+            .Select(info => info.Name)
+            .ToArray();
+
         private async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(string userToken)
         {
             var me = await factory.Me(appKey, userToken);
@@ -95,11 +99,6 @@ namespace TaskManager.Trello
                 })
                 .ToArray();
         }
-
-        public string[] GetButtons(long userId) => GetAllBoardColumnsInfo(userId)
-            .Result
-            .Select(info => info.Name)
-            .ToArray();
 
         private async Task<MyTask[]> GetAllColumnTasks(long userId, string columnName)
         {

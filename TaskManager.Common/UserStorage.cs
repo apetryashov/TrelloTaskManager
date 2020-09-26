@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using TelegramBot.Core.Domain;
 
 namespace TaskManager.Common
 {
@@ -55,7 +54,7 @@ namespace TaskManager.Common
             var filter = GetFilter(id);
             var unset = Builders<AuthorWithItems>.Update
                 .Unset($"Items.{itemFieldName}");
-            
+
             collection.UpdateOne(filter, unset);
         }
 
@@ -77,7 +76,7 @@ namespace TaskManager.Common
         {
             [BsonElement("_id")] public long Id { get; set; }
 
-            public Dictionary<string, object> Items { get; set; } = new Dictionary<string, object>();
+            public Dictionary<string, object> Items { get; } = new Dictionary<string, object>();
         }
     }
 }

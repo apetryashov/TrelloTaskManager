@@ -11,14 +11,15 @@ namespace TelegramBot.Core
     {
         private static readonly ParseMode parseMode = ParseMode.Default;
 
-        public static async Task SendResponse(this ITelegramBotClient bot, long chatId, IResponse response) => await (response switch
-        {
-            TextResponse r => bot.SendResponse(chatId, r),
-            ButtonResponse r => bot.SendResponse(chatId, r),
-            InlineButtonResponse r => bot.SendResponse(chatId, r),
-            LinkResponse r => bot.SendResponse(chatId, r),
-            ChainResponse r => bot.SendResponse(chatId, r),
-        });
+        public static async Task SendResponse(this ITelegramBotClient bot, long chatId, IResponse response)
+            => await (response switch
+            {
+                TextResponse r => bot.SendResponse(chatId, r),
+                ButtonResponse r => bot.SendResponse(chatId, r),
+                InlineButtonResponse r => bot.SendResponse(chatId, r),
+                LinkResponse r => bot.SendResponse(chatId, r),
+                ChainResponse r => bot.SendResponse(chatId, r)
+            });
 
         private static async Task SendResponse(this ITelegramBotClient bot, long chatId, TextResponse response) =>
             await bot.SendTextMessageAsync(chatId, response.Text, parseMode);

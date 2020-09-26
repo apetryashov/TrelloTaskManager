@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TaskManager.Common;
 using TelegramBot.Core.Commands;
 using TelegramBot.Core.Domain;
@@ -26,15 +27,15 @@ namespace TaskManager.Bot.Commands.Authorization
             IAuthorizationProvider authorizationProvider)
             => this.authorizationProvider = authorizationProvider;
 
-        public IResponse StartCommand(ICommandInfo commandInfo)
+        public Task<IResponse> StartCommand(ICommandInfo commandInfo)
         {
             var command = commandInfo.Command;
             var author = commandInfo.Author;
-            return command switch
+            return (command switch
             {
                 "/start" => StartAuthorization(author, true),
                 _ => StartAuthorization(author, false)
-            };
+            }).RunAsTask();
         }
 
         public string CommandTrigger { get; } = "/authorize";
@@ -51,8 +52,8 @@ namespace TaskManager.Bot.Commands.Authorization
 
         private IResponse GetHelpResponse(Author author) =>
             LinkResponse.Create(
-                $"Чтобы пройти авторизацию, тебе нужно пройти лишь перейти по ссылке " +
-                $"и нажать кнопку `Разрешить`",
+                "Чтобы пройти авторизацию, тебе нужно пройти лишь перейти по ссылке " +
+                "и нажать кнопку `Разрешить`",
                 "Авторизоваться",
                 authorizationProvider.GetAuthorizationUrl(author));
     }
