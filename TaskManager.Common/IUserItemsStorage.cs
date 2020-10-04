@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace TaskManager.Common
 {
     public interface IUserItemsStorage<TItem>
@@ -6,5 +8,6 @@ namespace TaskManager.Common
         TItem Get(long id);
         void Delete(long id);
         bool Has(long id);
+        IEnumerable<(long id, TItem item)> GetAllItems();
     }
 }

@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using TaskManager.Common;
+using TaskManager.Trello;
 
 namespace TaskManager.Ioc.Modules
 {
@@ -13,6 +15,7 @@ namespace TaskManager.Ioc.Modules
 
         public void Load(IServiceCollection services)
         {
+            BsonClassMap.RegisterClassMap<TrelloApiToken>();
             var url = MongoUrl.Create(connectionProperties.GetConnectionString());
             var mongoDb = new MongoClient(url)
                 .GetDatabase(url.DatabaseName);

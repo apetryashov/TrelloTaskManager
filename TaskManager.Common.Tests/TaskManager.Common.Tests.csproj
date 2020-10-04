@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TaskManager.Common\TaskManager.Common.csproj" />
+      <ProjectReference Include="..\TaskManager.Trello\TaskManager.Trello.csproj" />
     </ItemGroup>
 
 </Project>

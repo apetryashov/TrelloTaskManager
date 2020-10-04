@@ -9,7 +9,7 @@ namespace TaskManager.Trello
 {
     public class TrelloTasksHandler : ITaskHandler, ITextButtonMenuProvider // refactor this
     {
-        private readonly string appKey;
+        private readonly AppKey appKey;
         private readonly ITrelloFactory factory;
         private readonly IUserItemsStorage<TrelloApiToken> userTokenStorage;
 
@@ -19,26 +19,31 @@ namespace TaskManager.Trello
             IUserItemsStorage<TrelloApiToken> userTokenStorage
         )
         {
-            this.appKey = appKey.Key;
+            this.appKey = appKey;
             factory = trelloFactory;
             this.userTokenStorage = userTokenStorage;
         }
 
         public async Task<MyTask> GetTaskById(long userId, string taskId)
         {
-            var task = new Card(taskId, GetUserAuthorization(userId));
+            var token = GetUserToken(userId);
+
+            return await GetTaskById(token, taskId);
+        }
+
+        public async Task<MyTask> GetTaskById(string userToken, string taskId)
+        {
+            var task = new Card(taskId, GetAuthorization(userToken));
             await task.Refresh();
             await task.List.Refresh();
 
             return ToTrelloTask(task); //need set correct status
         }
 
-        public async Task<MyTask[]> GetAllTasks(long userId, string columnName)
-            => await GetAllColumnTasks(userId, columnName);
-
         public async Task ChangeTaskColumn(long userId, string taskId, string targetColumnId)
         {
-            var auth = GetUserAuthorization(userId);
+            var token = GetUserToken(userId);
+            var auth = GetAuthorization(token);
             var allBoardColumnsInfo = await GetAllBoardColumnsInfo(userId);
 
             var card = new Card(taskId, auth);
@@ -59,7 +64,8 @@ namespace TaskManager.Trello
 
         public async Task<MyTask> AddNewTask(long userId, MyTask myTask)
         {
-            var auth = GetUserAuthorization(userId);
+            var token = GetUserToken(userId);
+            var auth = GetAuthorization(token);
             var boardColumnInfo = (await GetAllBoardColumnsInfo(userId)).First();
 
             var column = new List(boardColumnInfo.Id, auth);
@@ -73,23 +79,23 @@ namespace TaskManager.Trello
         //TODO: сейчас доски ищутся в двух местах. Нужно вынести в одно  пользоваться там!
         public async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(long userId)
         {
-            var trelloAuthorization = GetUserAuthorization(userId);
-            return await GetAllBoardColumnsInfo(trelloAuthorization.UserToken);
+            var token = GetUserToken(userId);
+            return await GetAllBoardColumnsInfo(token);
         }
 
         public async Task<string[]> GetButtons(long userId) => (await GetAllBoardColumnsInfo(userId))
             .Select(info => info.Name)
             .ToArray();
 
-        private async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(string userToken)
+        public async Task<BoardColumnInfo[]> GetAllBoardColumnsInfo(string userToken)
         {
-            var me = await factory.Me(appKey, userToken);
+            var me = await factory.Me(GetAuthorization(userToken));
             await me.Refresh();
             var board = me.Boards.FirstOrDefault(x => x.Name == "TrelloTaskManager");
 
             if (board == null)
                 throw new Exception(); //TODO:
-            await board.Lists.Refresh();
+            await board.Lists.Refresh(true);
 
             return board.Lists
                 .Select(column => new BoardColumnInfo
@@ -100,10 +106,17 @@ namespace TaskManager.Trello
                 .ToArray();
         }
 
-        private async Task<MyTask[]> GetAllColumnTasks(long userId, string columnName)
+        public async Task<MyTask[]> GetAllColumnTasks(long userId, string columnName)
         {
-            var auth = GetUserAuthorization(userId);
-            var allBoardColumnsInfo = await GetAllBoardColumnsInfo(userId);
+            var token = GetUserToken(userId);
+
+            return await GetAllColumnTasks(token, columnName);
+        }
+
+        public async Task<MyTask[]> GetAllColumnTasks(string userToken, string columnName)
+        {
+            var auth = GetAuthorization(userToken);
+            var allBoardColumnsInfo = await GetAllBoardColumnsInfo(userToken);
             var boardColumnInfo = allBoardColumnsInfo.FirstOrDefault(x => x.Name == columnName);
 
             if (boardColumnInfo == default)
@@ -116,19 +129,21 @@ namespace TaskManager.Trello
             return boardList.Cards.Select(ToTrelloTask).ToArray();
         }
 
-        private TrelloAuthorization GetUserAuthorization(long userId)
+        private TrelloApiToken GetUserToken(long userId)
         {
             var token = userTokenStorage.Get(userId);
 
             if (token == null)
                 throw new ArgumentException($"token for user with id {userId} not found");
 
-            return new TrelloAuthorization
-            {
-                AppKey = appKey,
-                UserToken = token.Token
-            };
+            return token;
         }
+
+        private TrelloAuthorization GetAuthorization(string userToken) => new TrelloAuthorization
+        {
+            AppKey = appKey.Key,
+            UserToken = userToken
+        };
 
         private static MyTask ToTrelloTask(ICard card) => new MyTask
         {
@@ -140,4 +155,3 @@ namespace TaskManager.Trello
         };
     }
 }
-//170!

@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TaskManager.Bot\TaskManager.Bot.csproj" />
+      <ProjectReference Include="..\TaskManager.Reminder\TaskManager.Reminder.csproj" />
     </ItemGroup>
 
 </Project>

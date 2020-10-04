@@ -24,14 +24,14 @@ namespace TaskManager.Ioc.Modules
             services.AddSingleton(new ReturnUrl {Url = returnUrl});
             services.AddScoped<ITrelloFactory, TrelloFactory>();
 
-            services.AddScoped<IUserItemsStorage<TrelloApiToken>>(provider =>
+            services.AddTransient<IUserItemsStorage<TrelloApiToken>>(provider =>
                 new MongoUserItemsStorage<TrelloApiToken>(
                     provider.GetService<IMongoDatabase>(),
                     "trello-token")
             );
 
-            services.AddScoped<ITrelloFactory, TrelloFactory>();
-            services.AddScoped<ITaskHandler, TrelloTasksHandler>();
+            services.AddTransient<ITrelloFactory, TrelloFactory>();
+            services.AddTransient<ITaskHandler, TrelloTasksHandler>();
             services.AddScoped<IAuthorizationProvider, TrelloAuthorizationProvider>();
             services.AddScoped<ITextButtonMenuProvider, TrelloTasksHandler>();
         }

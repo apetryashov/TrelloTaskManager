@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using MongoDB.Driver;
 using NUnit.Framework;
@@ -7,9 +8,6 @@ namespace TaskManager.Common.Tests
     [TestFixture]
     public class UserItemsStorageSpec
     {
-        private MongoUserItemsStorage<TestItem> storage;
-        private const string CollectionName = "test-entity";
-        private IMongoDatabase mongoDatabase;
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -25,9 +23,13 @@ namespace TaskManager.Common.Tests
 
             storage = new MongoUserItemsStorage<TestItem>(mongoDatabase, CollectionName);
         }
-
+        
         [SetUp]
         public void SetUp() => mongoDatabase.DropCollection(CollectionName);
+
+        private MongoUserItemsStorage<TestItem> storage;
+        private const string CollectionName = "test-entity";
+        private IMongoDatabase mongoDatabase;
 
         [Test]
         public void Should_set_and_get_item()
@@ -45,7 +47,8 @@ namespace TaskManager.Common.Tests
         public void Should_update_item_after_reinsert()
         {
             const int authorId = 1;
-            var item = GetTestItem(authorId);;
+            var item = GetTestItem(authorId);
+            ;
             var newItem = GetTestItem(authorId);
             newItem.TestLongField = 321;
 
@@ -60,9 +63,9 @@ namespace TaskManager.Common.Tests
         public void Should_return_null_when_item_was_not_found()
         {
             const int authorId = 1;
-            
+
             var itemFromStorage = storage.Get(authorId);
-            
+
             itemFromStorage.Should().BeNull();
         }
 
@@ -71,11 +74,11 @@ namespace TaskManager.Common.Tests
         {
             const int authorId = 1;
             var item = GetTestItem(authorId);
-            
+
             storage.Set(authorId, item);
             storage.Delete(authorId);
             var itemFromStorage = storage.Get(authorId);
-            
+
             itemFromStorage.Should().BeNull();
         }
 
@@ -83,19 +86,19 @@ namespace TaskManager.Common.Tests
         public void Should_return_false_when_item_not_fount()
         {
             const int authorId = 1;
-            
+
             storage.Has(authorId).Should().BeFalse();
         }
-        
+
         [Test]
         public void Should_return_false()
         {
             const int authorId = 1;
             var item = GetTestItem(authorId);
-            
+
             storage.Set(authorId, item);
             storage.Delete(authorId);
-            
+
             storage.Has(authorId).Should().BeFalse();
         }
 
@@ -104,10 +107,22 @@ namespace TaskManager.Common.Tests
         {
             const int authorId = 1;
             var item = GetTestItem(authorId);
-            
+
             storage.Set(authorId, item);
-            
+
             storage.Has(authorId).Should().BeTrue();
+        }
+
+        [Test]
+        public void Should_return_all_items()
+        {
+            var items = Enumerable.Range(1, 100)
+                .Select(id => (id, item: GetTestItem(id))).ToList();
+
+            items.ForEach(x => storage.Set(x.id, x.item));
+
+            var itemsFromStorage = storage.GetAllItems().ToArray();
+            itemsFromStorage.Should().BeEquivalentTo(items);
         }
 
         private static TestItem GetTestItem(long id) => new TestItem
@@ -115,7 +130,7 @@ namespace TaskManager.Common.Tests
             TestLongField = id,
             TestStringField = $"field_for_user_with_id_{id}"
         };
-        
+
         private class TestItem
         {
             public string TestStringField { get; set; }

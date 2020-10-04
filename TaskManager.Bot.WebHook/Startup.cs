@@ -1,3 +1,4 @@
+using AspNetCore.Scheduler.ScheduleTask;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,7 @@ namespace TaskManager.Bot.WebHook
                 .AddModule<CommandModule>()
                 .AddModule<CommonModule>()
                 .AddModule(new MongoDbAuthorizationStorageModule(mongoConnectionProperties))
+                .AddModule(new ReminderModule("18 * * * *"))
                 .AddControllers()
                 .AddNewtonsoftJson();
         }

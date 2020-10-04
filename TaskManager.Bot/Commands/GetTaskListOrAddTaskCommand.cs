@@ -30,7 +30,7 @@ namespace TaskManager.Bot.Commands
             if (!columns.Contains(command))
                 return await addTaskCommand.StartCommand(commandInfo);
 
-            var tasks = await taskProvider.GetAllTasks(commandInfo.Author.TelegramId, command);
+            var tasks = await taskProvider.GetAllColumnTasks(commandInfo.Author.TelegramId, command);
             var buttons = tasks.Select(x => (x.Name, $"/task_{x.Id}")).ToArray();
             return InlineButtonResponse.CreateWithVerticalButtons(command, buttons);
         }

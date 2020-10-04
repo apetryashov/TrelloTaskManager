@@ -23,10 +23,12 @@ namespace TaskManager.Common.Tasks
 
             sb.AppendLine($@"
 
-Найти задачу вы всегда можете вызвав комманду /task_{Id}
+Найти задачу вы всегда можете вызвав комманду {GetLinkString()}
 Так же вы можете найти ее на TrelloTaskManager доске по ссылке {Url}");
 
             return sb.ToString();
         }
+
+        public string GetLinkString() => $"/task_{Id}";
     }
 }
