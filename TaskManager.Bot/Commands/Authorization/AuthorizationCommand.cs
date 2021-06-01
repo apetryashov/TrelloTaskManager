@@ -53,7 +53,7 @@ namespace TaskManager.Bot.Commands.Authorization
         private IResponse GetHelpResponse(Author author) =>
             LinkResponse.Create(
                 "Чтобы пройти авторизацию, тебе нужно пройти лишь перейти по ссылке " +
-                "и нажать кнопку `Разрешить`",
+                "и нажать кнопку <b>Разрешить</b>",
                 "Авторизоваться",
                 authorizationProvider.GetAuthorizationUrl(author));
     }

@@ -1,9 +1,9 @@
-using AspNetCore.Scheduler.ScheduleTask;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TaskManager.Bot.WebHook.Services;
 using TaskManager.Common;
 using TaskManager.Ioc;
@@ -19,26 +19,12 @@ namespace TaskManager.Bot.WebHook
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var botConfiguration = Configuration.GetSection("BotConfiguration").Get<BotConfiguration>();
-            var mongoConnectionProperties =
-                Configuration.GetSection("MongoConfiguration").Get<MongoConnectionProperties>();
-
             services.AddRazorPages();
-
-            services.AddScoped<IUpdateService, UpdateService>();
-            services.AddScoped<IRequestHandler, RequestHandler>();
-
-            services
-                .AddModule(new TelegramBotModule(botConfiguration))
-                .AddModule(new TrelloModule(botConfiguration.AccessToken, botConfiguration.ReturnUrl))
-                .AddModule<CommandModule>()
-                .AddModule<CommonModule>()
-                .AddModule(new MongoDbAuthorizationStorageModule(mongoConnectionProperties))
-                .AddModule(new ReminderModule("18 * * * *"))
+            services.AddLogging(x => x.AddConsole());
+            ConfigIoc(services)
                 .AddControllers()
                 .AddNewtonsoftJson();
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -54,6 +40,24 @@ namespace TaskManager.Bot.WebHook
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
             });
+        }
+
+        private IServiceCollection ConfigIoc(IServiceCollection services)
+        {
+            var botConfiguration = Configuration.GetSection("BotConfiguration").Get<BotConfiguration>();
+            var mongoConnectionProperties =
+                Configuration.GetSection("MongoConfiguration").Get<MongoConnectionProperties>();
+            var croneString = Configuration.GetValue<string>("Cron");
+
+            return services
+                .AddScoped<IUpdateService, UpdateService>()
+                .AddScoped<IRequestHandler, RequestHandler>()
+                .AddModule(new TelegramBotModule(botConfiguration))
+                .AddModule(new TrelloModule(botConfiguration.AccessToken, botConfiguration.ReturnUrl))
+                .AddModule<CommandModule>()
+                .AddModule<CommonModule>()
+                .AddModule(new MongoDbAuthorizationStorageModule(mongoConnectionProperties))
+                .AddModule(new ReminderModule(croneString));
         }
     }
 }

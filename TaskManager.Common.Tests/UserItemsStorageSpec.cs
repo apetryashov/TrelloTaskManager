@@ -13,7 +13,10 @@ namespace TaskManager.Common.Tests
         {
             var connectionProperties = new MongoConnectionProperties
             {
-                
+                Database = "",
+                Hosts = new[] {""},
+                Username = "",
+                Password = ""
             };
             var url = MongoUrl.Create(connectionProperties.GetConnectionString());
             var mongoClient = new MongoClient(url);

@@ -9,7 +9,7 @@ namespace TelegramBot.Core
 {
     public static class TelegramResponseHandler
     {
-        private static readonly ParseMode parseMode = ParseMode.Default;
+        private static readonly ParseMode ParseMode = ParseMode.Html;
 
         public static async Task SendResponse(this ITelegramBotClient bot, long chatId, IResponse response) => await (response switch
         {
@@ -24,7 +24,7 @@ namespace TelegramBot.Core
         private static async Task Nothing() {}
 
         private static async Task SendResponse(this ITelegramBotClient bot, long chatId, TextResponse response) =>
-            await bot.SendTextMessageAsync(chatId, response.Text, parseMode);
+            await bot.SendTextMessageAsync(chatId, response.Text, ParseMode);
 
         private static async Task SendResponse(this ITelegramBotClient bot, long chatId, ButtonResponse response)
         {
@@ -32,7 +32,7 @@ namespace TelegramBot.Core
             markup.ResizeKeyboard = true;
 
             await bot.SendTextMessageAsync(chatId, response.Text,
-                parseMode,
+                ParseMode,
                 replyMarkup: markup);
         }
 
@@ -46,7 +46,7 @@ namespace TelegramBot.Core
                 ).ToArray();
 
             await bot.SendTextMessageAsync(chatId, response.Text,
-                parseMode,
+                ParseMode,
                 replyMarkup: markup);
         }
 
@@ -56,7 +56,7 @@ namespace TelegramBot.Core
                 InlineKeyboardButton.WithUrl(response.LinkMessage, response.Link.ToString()));
 
             await bot.SendTextMessageAsync(chatId, response.Text,
-                parseMode,
+                ParseMode,
                 replyMarkup: markup);
         }
 

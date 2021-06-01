@@ -14,15 +14,14 @@ namespace TaskManager.Common.Tasks
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"[Название]: {Name}");
+            sb.AppendLine($"<b>Название:</b> {Name}");
 
             if (Description != null)
-                sb.AppendLine($"[Описание]: {Description}");
+                sb.AppendLine($"<b>Описание:</b> {Description}");
 
-            sb.AppendLine($"[Статус]: {Status}");
+            sb.AppendLine($"<b>Статус:</b> {Status}");
 
             sb.AppendLine($@"
-
 Найти задачу вы всегда можете вызвав комманду {GetLinkString()}
 Так же вы можете найти ее на TrelloTaskManager доске по ссылке {Url}");
 

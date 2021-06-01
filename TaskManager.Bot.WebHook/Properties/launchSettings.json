@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Telegram.Bot.Examples.DotNetCoreWebHook": {
+    "Telegram.Bot.WebHook": {
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {

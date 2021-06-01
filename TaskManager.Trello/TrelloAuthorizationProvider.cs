@@ -1,6 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Dynamic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Web;
 using Manatee.Trello;
 using TaskManager.Common;
 using TelegramBot.Core.Domain;
@@ -49,12 +54,18 @@ namespace TaskManager.Trello
         }
 
         public Uri GetAuthorizationUrl(Author author)
-            => new Uri("https://trello.com/1/authorize" +
-                       "?expiration=never" +
-                       "&scope=read,write,account" +
-                       "&response_type=token" +
-                       "&name=TrelloTaskManager" +
-                       $"&key={appKey}" +
-                       $"&return_url={returnUrl}/auth?telegram_id={author.TelegramId}");
+        {
+            var parameters = new Dictionary<string, string>()
+            {
+                {"expiration", "never"},
+                {"scope", "read,write,account"},
+                {"response_type", "token"},
+                {"name", "TrelloTaskManager"},
+                {"key", appKey},
+                {"return_url", $"{returnUrl}/auth?telegram_id={author.TelegramId}"},
+            }.Select(kv => $"{kv.Key}={kv.Value}");
+
+            return new Uri($"https://trello.com/1/authorize?{string.Join('&', parameters)}");
+        }
     }
 }
